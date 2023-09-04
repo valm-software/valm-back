@@ -5,13 +5,15 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
+// Add services to the container.
+
 builder.Services.ConfigureCors();
 builder.Services.AddAplicacionServices();
+
 builder.Services.AddControllers();
 
-// Este es actualizado y autodetecta la version de mariaDb
+    // Este es actualizado y autodetecta la version de mariaDb
 builder.Services.AddDbContext<ValmContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MariaDBConnection");
@@ -29,15 +31,10 @@ builder.Services.AddDbContext<ValmContext>(options =>
 });   
 */
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Configurar el puerto 5000
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5003);
-});
 
 var app = builder.Build();
 
@@ -51,11 +48,11 @@ if (app.Environment.IsDevelopment())
 // Aplicamos de manera automatica las actualizaciones de la base de datos
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var loggerfactory = services.GetRequiredService<ILoggerFactory>();
+    var services =scope.ServiceProvider;
+    var loggerfactory =services.GetRequiredService<ILoggerFactory>();
     try
     {
-        var context = services.GetRequiredService<ValmContext>();
+        var context =services.GetRequiredService<ValmContext>();
         await context.Database.MigrateAsync();
         await ValmContextSeed.SeedAsync(context, loggerfactory);
     }
