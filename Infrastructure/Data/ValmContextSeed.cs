@@ -52,7 +52,7 @@ public class ValmContextSeed
                             productos.Add(new Producto
                             {
                                 Id = item.Id,
-                                Nombre_test = item.Nombre_test,
+                                Nombre = item.Nombre,
                                 Precio = item.Precio,
                                 FechaCreacion = item.FechaCreacion,
                                 CategoriaId = item.CategoriaId,

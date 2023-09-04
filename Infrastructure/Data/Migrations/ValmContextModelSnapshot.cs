@@ -117,7 +117,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("MarcaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Nombre_test")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
