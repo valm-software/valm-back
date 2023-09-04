@@ -33,20 +33,27 @@ builder.Services.AddDbContext<ValmContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configurar el puerto 5000
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5000);
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
+
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
 //}
+
+// Configurar el puerto 5000
+if (!app.Environment.IsDevelopment())
+{
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ListenAnyIP(5000);
+    });
+}
+
 
 // Aplicamos de manera automatica las actualizaciones de la base de datos
 using (var scope = app.Services.CreateScope())
