@@ -10,7 +10,7 @@ public class ProductoConfiguration : IEntityTypeConfiguration<Producto>
         builder.ToTable("Producto");
         builder.Property(p => p.Id)
                 .IsRequired();
-        builder.Property(p => p.Nombre)
+        builder.Property(p => p.Nombre_test)
                 .IsRequired()
                 .HasMaxLength(100);
         builder.Property(p => p.Precio)
