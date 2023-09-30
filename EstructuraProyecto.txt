@@ -1,0 +1,279 @@
+valm-back
+|   .dockerignore
+|   .gitattributes
+|   .gitignore
+|   arbol.txt
+|   estructura del proyecto.txt
+|   valm-back.sln
+|   
++---Api
+|   |   Api.csproj
+|   |   Api.csproj.user
+|   |   appsettings.Development.json
+|   |   appsettings.json
+|   |   Dockerfile
+|   |   Program.cs
+|   |   WeatherForecast.cs
+|   |   
+|   +---bin
+|   |   +---Debug
+|   |       +---net7.0
+|   |           |   Api.deps.json
+|   |           |   Api.dll
+|   |           |   Api.exe
+|   |           |   Api.pdb
+|   |           |   Api.runtimeconfig.json
+|   |           |   appsettings.Development.json
+|   |           |   appsettings.json
+|   |           |   AutoMapper.dll
+|   |           |   AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+|   |           |   Core.dll
+|   |           |   Core.pdb
+|   |           |   CsvHelper.dll
+|   |           |   Humanizer.dll
+|   |           |   Infrastructure.dll
+|   |           |   Infrastructure.pdb
+|   |           |   Microsoft.AspNetCore.OpenApi.dll
+|   |           |   Microsoft.EntityFrameworkCore.Abstractions.dll
+|   |           |   Microsoft.EntityFrameworkCore.Design.dll
+|   |           |   Microsoft.EntityFrameworkCore.dll
+|   |           |   Microsoft.EntityFrameworkCore.Relational.dll
+|   |           |   Microsoft.Extensions.DependencyModel.dll
+|   |           |   Microsoft.OpenApi.dll
+|   |           |   Mono.TextTemplating.dll
+|   |           |   MySqlConnector.dll
+|   |           |   Pomelo.EntityFrameworkCore.MySql.dll
+|   |           |   Swashbuckle.AspNetCore.Swagger.dll
+|   |           |   Swashbuckle.AspNetCore.SwaggerGen.dll
+|   |           |   Swashbuckle.AspNetCore.SwaggerUI.dll
+|   |           |   System.CodeDom.dll
+|   |           |   
+|   |           +---Data
+|   |               +---Csvs
+|   |                       Auth_Permisos.csv
+|   |                       Auth_Roles.csv
+|   |                       Auth_RolesPermisos.csv
+|   |                       Auth_Usuarios.csv
+|   |                       Auth_UsuariosRoles.csv
+|   |                       categorias.csv
+|   |                       marcas.csv
+|   |                       productos.csv
+|   |                       
+|   +---Controllers
+|   |       ControllerBaseApi.cs
+|   |       ControllerProductos.cs
+|   |       ControllerWeatherForecast.cs
+|   |       
+|   +---Dtos
+|   |       DtoCategoria.cs
+|   |       DtoMarca.cs
+|   |       DtoProducto.cs
+|   |       DtoProductoList.cs
+|   |       
+|   +---Extensions
+|   |       AplicationServiceExtensions.cs
+|   |       
+|   +---obj
+|   |   |   Api.csproj.nuget.dgspec.json
+|   |   |   Api.csproj.nuget.g.props
+|   |   |   Api.csproj.nuget.g.targets
+|   |   |   project.assets.json
+|   |   |   project.nuget.cache
+|   |   |   
+|   |   +---Debug
+|   |       +---net7.0
+|   |           |   .NETCoreApp,Version=v7.0.AssemblyAttributes.cs
+|   |           |   Api.AssemblyInfo.cs
+|   |           |   Api.AssemblyInfoInputs.cache
+|   |           |   Api.assets.cache
+|   |           |   Api.csproj.AssemblyReference.cache
+|   |           |   Api.csproj.BuildWithSkipAnalyzers
+|   |           |   Api.csproj.CopyComplete
+|   |           |   Api.csproj.CoreCompileInputs.cache
+|   |           |   Api.csproj.FileListAbsolute.txt
+|   |           |   Api.dll
+|   |           |   Api.GeneratedMSBuildEditorConfig.editorconfig
+|   |           |   Api.genruntimeconfig.cache
+|   |           |   Api.GlobalUsings.g.cs
+|   |           |   Api.MvcApplicationPartsAssemblyInfo.cache
+|   |           |   Api.MvcApplicationPartsAssemblyInfo.cs
+|   |           |   Api.pdb
+|   |           |   apphost.exe
+|   |           |   staticwebassets.build.json
+|   |           |   
+|   |           +---ref
+|   |           |       Api.dll
+|   |           |       
+|   |           +---refint
+|   |           |       Api.dll
+|   |           |       
+|   |           +---staticwebassets
+|   |                   msbuild.build.Api.props
+|   |                   msbuild.buildMultiTargeting.Api.props
+|   |                   msbuild.buildTransitive.Api.props
+|   |                   
+|   +---Profiles
+|   |       MappingProfiles.cs
+|   |       
+|   +---Properties
+|           launchSettings.json
+|           
++---Core
+|   |   Core.csproj
+|   |   
+|   +---bin
+|   |   +---Debug
+|   |       +---net7.0
+|   |               Core.deps.json
+|   |               Core.dll
+|   |               Core.pdb
+|   |               
+|   +---Entities
+|   |       Auth_Permiso.cs
+|   |       Auth_Rol.cs
+|   |       Auth_RolPermiso.cs
+|   |       Auth_Usuario.cs
+|   |       Auth_UsuarioRol.cs
+|   |       BaseEntity.cs
+|   |       Categoria.cs
+|   |       Marca.cs
+|   |       Producto.cs
+|   |       
+|   +---Interfaces
+|   |       ICategoriaRepository.cs
+|   |       IGenericRepositorty.cs
+|   |       IMarcaRepository.cs
+|   |       IProductoRepository.cs
+|   |       IUnitOfWork.cs
+|   |       
+|   +---obj
+|       |   Core.csproj.nuget.dgspec.json
+|       |   Core.csproj.nuget.g.props
+|       |   Core.csproj.nuget.g.targets
+|       |   project.assets.json
+|       |   project.nuget.cache
+|       |   
+|       +---Debug
+|           +---net7.0
+|               |   .NETCoreApp,Version=v7.0.AssemblyAttributes.cs
+|               |   Core.AssemblyInfo.cs
+|               |   Core.AssemblyInfoInputs.cache
+|               |   Core.assets.cache
+|               |   Core.csproj.AssemblyReference.cache
+|               |   Core.csproj.BuildWithSkipAnalyzers
+|               |   Core.csproj.CoreCompileInputs.cache
+|               |   Core.csproj.FileListAbsolute.txt
+|               |   Core.dll
+|               |   Core.GeneratedMSBuildEditorConfig.editorconfig
+|               |   Core.GlobalUsings.g.cs
+|               |   Core.pdb
+|               |   
+|               +---ref
+|               |       Core.dll
+|               |       
+|               +---refint
+|                       Core.dll
+|                       
++---Infrastructure
+    |   Infrastructure.csproj
+    |   
+    +---bin
+    |   +---Debug
+    |       +---net7.0
+    |           |   Core.dll
+    |           |   Core.pdb
+    |           |   Infrastructure.deps.json
+    |           |   Infrastructure.dll
+    |           |   Infrastructure.pdb
+    |           |   Infrastructure.runtimeconfig.json
+    |           |   
+    |           +---Data
+    |               +---Csvs
+    |                       Auth_Permisos.csv
+    |                       Auth_Roles.csv
+    |                       Auth_RolesPermisos.csv
+    |                       Auth_Usuarios.csv
+    |                       Auth_UsuariosRoles.csv
+    |                       categorias.csv
+    |                       marcas.csv
+    |                       productos.csv
+    |                       
+    +---Data
+    |   |   ValmContext.cs
+    |   |   ValmContextSeed.cs
+    |   |   
+    |   +---Configuration
+    |   |       ConfigurationAuth_Permiso.cs
+    |   |       ConfigurationAuth_Rol.cs
+    |   |       ConfigurationAuth_RolPermiso.cs
+    |   |       ConfigurationAuth_Usuario.cs
+    |   |       ConfigurationAuth_UsuarioRol.cs
+    |   |       ConfigurationCategoria.cs
+    |   |       ConfigurationMarca.cs
+    |   |       ConfigurationProducto.cs
+    |   |       
+    |   +---Csvs
+    |   |       Auth_Permisos.csv
+    |   |       Auth_Roles.csv
+    |   |       Auth_RolesPermisos.csv
+    |   |       Auth_Usuarios.csv
+    |   |       Auth_UsuariosRoles.csv
+    |   |       categorias.csv
+    |   |       marcas.csv
+    |   |       productos.csv
+    |   |       
+    |   +---Dtos
+    |   |       DtoAuth_RolPermiso.cs
+    |   |       DtoAuth_UsuarioRol.cs
+    |   |       
+    |   +---Migrations
+    |   |       20230930114636_Inicial.cs
+    |   |       20230930114636_Inicial.Designer.cs
+    |   |       20230930114826_VALM-8.cs
+    |   |       20230930114826_VALM-8.Designer.cs
+    |   |       ValmContextModelSnapshot.cs
+    |   |       
+    |   +---Scripts
+    |       +---Sprint_0
+    |               Inicial.sql
+    |               VALM-8.sql
+    |               
+    +---obj
+    |   |   Infrastructure.csproj.nuget.dgspec.json
+    |   |   Infrastructure.csproj.nuget.g.props
+    |   |   Infrastructure.csproj.nuget.g.targets
+    |   |   project.assets.json
+    |   |   project.nuget.cache
+    |   |   
+    |   +---Debug
+    |       +---net7.0
+    |           |   .NETCoreApp,Version=v7.0.AssemblyAttributes.cs
+    |           |   Infrastructure.AssemblyInfo.cs
+    |           |   Infrastructure.AssemblyInfoInputs.cache
+    |           |   Infrastructure.assets.cache
+    |           |   Infrastructure.csproj.AssemblyReference.cache
+    |           |   Infrastructure.csproj.BuildWithSkipAnalyzers
+    |           |   Infrastructure.csproj.CopyComplete
+    |           |   Infrastructure.csproj.CoreCompileInputs.cache
+    |           |   Infrastructure.csproj.FileListAbsolute.txt
+    |           |   Infrastructure.dll
+    |           |   Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+    |           |   Infrastructure.genruntimeconfig.cache
+    |           |   Infrastructure.GlobalUsings.g.cs
+    |           |   Infrastructure.pdb
+    |           |   
+    |           +---ref
+    |           |       Infrastructure.dll
+    |           |       
+    |           +---refint
+    |                   Infrastructure.dll
+    |                   
+    +---Repositories
+    |       CategoriaRepository.cs
+    |       GenericRepository.cs
+    |       MarcaRepository.cs
+    |       ProductoRepository.cs
+    |       
+    +---UnitOfWork
+            UnitOfWork.cs
+            

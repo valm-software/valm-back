@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Csvs\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Data\Scripts\Sprint_0\" />
   </ItemGroup>

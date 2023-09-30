@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
-    public class ProductosController : BaseApiController
+    public class ControllerProductos : ControllerBaseApi
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _Mapper;
 
-        public ProductosController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ControllerProductos(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _Mapper = mapper;
@@ -22,11 +22,11 @@ namespace Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ProductoListDto>>> Get()
+        public async Task<ActionResult<IEnumerable<DtoProductoList>>> Get()
         {
             var productos = await _unitOfWork.Productos
                 .GetAllAsync();
-            return _Mapper.Map<List<ProductoListDto>>(productos);
+            return _Mapper.Map<List<DtoProductoList>>(productos);
         }
 
         //GET: api/Productos/4
@@ -34,13 +34,13 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProductoDto>> Get(int id)
+        public async Task<ActionResult<DtoProducto>> Get(int id)
         {
             var producto = await _unitOfWork.Productos.GetByIdAsync(id);
             if (producto == null)
                 return NotFound();
 
-            return _Mapper.Map<ProductoDto>(producto);
+            return _Mapper.Map<DtoProducto>(producto);
         }
 
         //POST: api/Productos

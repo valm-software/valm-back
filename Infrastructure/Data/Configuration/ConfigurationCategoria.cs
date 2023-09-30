@@ -3,17 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Data.Configuration;
-public class MarcaConfiguration : IEntityTypeConfiguration<Marca>
+
+public class ConfigurationCategoria : IEntityTypeConfiguration<Categoria>
 {
-    public void Configure(EntityTypeBuilder<Marca> builder)
+    public void Configure(EntityTypeBuilder<Categoria> builder)
     {
-        builder.ToTable("Marca");
+        builder.ToTable("Categoria");
         builder.Property(p => p.Id)
                 .IsRequired();
         builder.Property(p => p.Nombre)
                 .IsRequired()
                 .HasMaxLength(100);
-
     }
+
 
 }

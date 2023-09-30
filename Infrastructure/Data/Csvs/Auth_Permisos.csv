@@ -1,0 +1,19 @@
+﻿Id,Nombre,Modulo
+1,Gestionar Usuarios,Usuarios
+2,Gestionar Roles y Permisos,Roles y Permisos
+3,Realizar Ventas,Ventas
+4,Visualizar Ventas,Ventas
+5,Gestionar Inventario,Inventario
+6,Visualizar Inventario,Inventario
+7,Realizar Cobros,Cobros
+8,Visualizar Cobros,Cobros
+9,Realizar Entregas,Entregas
+10,Visualizar Entregas,Entregas
+11,Registrar Gastos,Gastos
+12,Visualizar Gastos,Gastos
+13,Generar Reportes Financieros,Finanzas
+14,Visualizar Reportes Financieros,Finanzas
+15,Gestionar Clientes,Clientes
+16,Visualizar Clientes,Clientes
+17,Gestionar Soporte,Soporte
+18,Visualizar Soporte,Soporte
