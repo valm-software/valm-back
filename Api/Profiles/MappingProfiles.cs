@@ -8,16 +8,16 @@ namespace Api.Profiles
     {
         public MappingProfiles() 
         {
-            CreateMap<Producto, DtoProducto>()
+            CreateMap<Producto, ProductoDto>()
                 .ReverseMap();
 
-            CreateMap<Categoria, DtoCategoria>()
+            CreateMap<Categoria, CategoriaDto>()
                 .ReverseMap();
 
-            CreateMap<Marca, DtoMarca>()
+            CreateMap<Marca, MarcaDto>()
                 .ReverseMap();
 
-            CreateMap<Producto, DtoProductoList>()
+            CreateMap<Producto, ProductoListDto>()
                 .ForMember(des => des.Marca, origen => origen.MapFrom(origen => origen.Marca.Nombre))
                 .ForMember(des => des.Categoria, origen => origen.MapFrom(origen => origen.Categoria.Nombre))
                 .ReverseMap()

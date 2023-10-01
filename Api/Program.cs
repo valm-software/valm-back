@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
+builder.Services.ConfigureJwtAuthentication(builder.Configuration); 
+
 builder.Services.AddAplicacionServices();
 builder.Services.AddControllers();
 
@@ -19,25 +21,9 @@ builder.Services.AddDbContext<ValmContext>(options =>
 });
 
 
-/*
- * Esta version es para una vercion especifica de mariadb
-builder.Services.AddDbContext<ValmContext>(options =>
-{
-    var serverVersion = new MariaDbServerVersion(new Version(11, 0, 2));
-    options.UseMySql(builder.Configuration.GetConnectionString("MariaDBConnection"), serverVersion);
-
-});   
-*/
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//// Configurar el puerto 5000
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    serverOptions.ListenAnyIP(5000);
-//});
 
 // Configurar el puerto 5000
 if (!builder.Environment.IsDevelopment())
@@ -54,11 +40,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
 
 // Aplicamos de manera automatica las actualizaciones de la base de datos
 using (var scope = app.Services.CreateScope())

@@ -15,89 +15,89 @@ public class ValmContextSeed
             var ruta = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
 
-            if (!context.Auth_Usuarios.Any()) 
+            if (!context.AuthUsuarios.Any()) 
             {
-                using (var readerAuth_Usuarios = new StreamReader(ruta + @"/Data/Csvs/Auth_Usuarios.csv"))
+                using (var readerAuthUsuarios = new StreamReader(ruta + @"/Data/Csvs/AuthUsuarios.csv"))
                 {
-                    using (var csvAuth_Usuarios = new CsvReader(readerAuth_Usuarios, CultureInfo.InvariantCulture)) {
+                    using (var csvAuthUsuarios = new CsvReader(readerAuthUsuarios, CultureInfo.InvariantCulture)) {
 
-                        var Auth_Usuarios = csvAuth_Usuarios.GetRecords<Auth_Usuario>();
-                        context.Auth_Usuarios.AddRange(Auth_Usuarios);
+                        var AuthUsuarios = csvAuthUsuarios.GetRecords<AuthUsuario>();
+                        context.AuthUsuarios.AddRange(AuthUsuarios);
                         await context.SaveChangesAsync();
                     }
                 }            
             }
 
 
-            if (!context.Auth_Roles.Any()) 
+            if (!context.AuthRoles.Any()) 
             {
-                using (var readerAuth_Roles = new StreamReader(ruta + @"/Data/Csvs/Auth_Roles.csv"))
+                using (var readerAuthRoles = new StreamReader(ruta + @"/Data/Csvs/AuthRoles.csv"))
                 {
-                    using (var csvAuth_Roles = new CsvReader(readerAuth_Roles, CultureInfo.InvariantCulture))
+                    using (var csvAuthRoles = new CsvReader(readerAuthRoles, CultureInfo.InvariantCulture))
                     {
-                        var Auth_Roles = csvAuth_Roles.GetRecords<Auth_Rol>();
-                        context.Auth_Roles.AddRange(Auth_Roles);
+                        var AuthRoles = csvAuthRoles.GetRecords<AuthRol>();
+                        context.AuthRoles.AddRange(AuthRoles);
                         await context.SaveChangesAsync();
                     }
                 }            
             }
 
-            if (!context.Auth_Permisos.Any())
+            if (!context.AuthPermisos.Any())
             {
-                using (var readerAuth_Permisos = new StreamReader(ruta + @"/Data/Csvs/Auth_Permisos.csv"))
+                using (var readerAuthPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthPermisos.csv"))
                 {
-                    using (var csvAuth_Permisos = new CsvReader(readerAuth_Permisos, CultureInfo.InvariantCulture))
+                    using (var csvAuthPermisos = new CsvReader(readerAuthPermisos, CultureInfo.InvariantCulture))
                     {
-                        var Auth_Permisos = csvAuth_Permisos.GetRecords<Auth_Permiso>();
-                        context.Auth_Permisos.AddRange(Auth_Permisos);
+                        var AuthPermisos = csvAuthPermisos.GetRecords<AuthPermiso>();
+                        context.AuthPermisos.AddRange(AuthPermisos);
                         await context.SaveChangesAsync();
                     }
                 }
             }
 
-            if (!context.Auth_RolesPermisos.Any())
+            if (!context.AuthRolesPermisos.Any())
             {
-                using (var readerAuth_RolesPermisos = new StreamReader(ruta + @"/Data/Csvs/Auth_RolesPermisos.csv"))
+                using (var readerAuthRolesPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthRolesPermisos.csv"))
                 {
-                    using (var csvAuth_RolesPermisos = new CsvReader(readerAuth_RolesPermisos, CultureInfo.InvariantCulture))
+                    using (var csvAuthRolesPermisos = new CsvReader(readerAuthRolesPermisos, CultureInfo.InvariantCulture))
                     {
-                        var Auth_RolesPermisosRecords = csvAuth_RolesPermisos.GetRecords<DtoAuth_RolPermiso>(); // Utilizamos el DTO aquí
+                        var AuthRolesPermisosRecords = csvAuthRolesPermisos.GetRecords<AuthRolPermisoDto>(); // Utilizamos el DTO aquí
 
-                        List<Auth_RolPermiso> Auth_RolesPermisosList = new List<Auth_RolPermiso>();
-                        foreach (var record in Auth_RolesPermisosRecords)
+                        List<AuthRolPermiso> AuthRolesPermisosList = new List<AuthRolPermiso>();
+                        foreach (var record in AuthRolesPermisosRecords)
                         {
-                            Auth_RolesPermisosList.Add(new Auth_RolPermiso
+                            AuthRolesPermisosList.Add(new AuthRolPermiso
                             {
                                 RolId = record.RolId,
                                 PermisoId = record.PermisoId
                             });
                         }
 
-                        context.Auth_RolesPermisos.AddRange(Auth_RolesPermisosList);
+                        context.AuthRolesPermisos.AddRange(AuthRolesPermisosList);
                         await context.SaveChangesAsync();
                     }
                 }
             }
 
-            if (!context.Auth_UsuariosRoles.Any()) // Verifica si ya hay registros en la tabla Auth_UsuarioRol
+            if (!context.AuthUsuariosRoles.Any()) // Verifica si ya hay registros en la tabla AuthUsuarioRol
             {
-                using (var readerAuth_UsuariosRoles = new StreamReader(ruta + @"/Data/Csvs/Auth_UsuariosRoles.csv"))
+                using (var readerAuthUsuariosRoles = new StreamReader(ruta + @"/Data/Csvs/AuthUsuariosRoles.csv"))
                 {
-                    using (var csvAuth_UsuariosRoles = new CsvReader(readerAuth_UsuariosRoles, CultureInfo.InvariantCulture))
+                    using (var csvAuthUsuariosRoles = new CsvReader(readerAuthUsuariosRoles, CultureInfo.InvariantCulture))
                     {
-                        var Auth_UsuariosRolesRecords = csvAuth_UsuariosRoles.GetRecords<DtoAuth_UsuarioRol>(); // Utilizamos el DTO aquí
+                        var AuthUsuariosRolesRecords = csvAuthUsuariosRoles.GetRecords<AuthUsuarioRolDto>(); // Utilizamos el DTO aquí
 
-                        List<Auth_UsuarioRol> Auth_UsuariosRolesList = new List<Auth_UsuarioRol>();
-                        foreach (var record in Auth_UsuariosRolesRecords)
+                        List<AuthUsuarioRol> AuthUsuariosRolesList = new List<AuthUsuarioRol>();
+                        foreach (var record in AuthUsuariosRolesRecords)
                         {
-                            Auth_UsuariosRolesList.Add(new Auth_UsuarioRol
+                            AuthUsuariosRolesList.Add(new AuthUsuarioRol
                             {
                                 UsuarioId = record.UsuarioId,
                                 RolId = record.RolId
                             });
                         }
 
-                        context.Auth_UsuariosRoles.AddRange(Auth_UsuariosRolesList); // Agrega todos los registros a la tabla Auth_UsuarioRol
+                        context.AuthUsuariosRoles.AddRange(AuthUsuariosRolesList); // Agrega todos los registros a la tabla AuthUsuarioRol
                         await context.SaveChangesAsync(); // Guarda los cambios en la base de datos
                     }
                 }

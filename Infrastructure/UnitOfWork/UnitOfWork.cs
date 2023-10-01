@@ -1,7 +1,7 @@
 ﻿using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Infrastructure.UnitOfWork
 {
@@ -11,10 +11,60 @@ namespace Infrastructure.UnitOfWork
         private IProductoRepository _productos;
         private IMarcaRepository _marcas;
         private ICategoriaRepository _categorias;
+        private IAuthUsuarioRepository _authUsuarios;
+        private IAuthRolRepository _authRoles;
+        private IAuthPermisoRepository _authPermisos;
+        private IAuthUsuarioRolRepository _authUsuariosRoles;
+        private IAuthRolPermisoRepository _authRolesPermisos;
+
         public UnitOfWork(ValmContext context)
         {
             _context = context;
         }
+
+
+
+        public IAuthUsuarioRepository AuthUsuarios
+        {
+            get
+            {
+                return _authUsuarios ??= new AuthUsuarioRepository(_context);
+            }
+        }
+
+        public IAuthRolRepository AuthRoles
+        {
+            get
+            {
+                return _authRoles ??= new AuthRolRepository(_context);
+            }
+        }
+
+        public IAuthPermisoRepository AuthPermisos
+        {
+            get
+            {
+                return _authPermisos ??= new AuthPermisoRepository(_context);
+            }
+        }
+
+        public IAuthUsuarioRolRepository AuthUsuariosRoles
+        {
+            get
+            {
+                return _authUsuariosRoles ??= new AuthUsuarioRolRepository(_context);
+            }
+        }
+
+        public IAuthRolPermisoRepository AuthRolesPermisos
+        {
+            get
+            {
+                return _authRolesPermisos ??= new AuthRolPermisoRepository(_context);
+            }
+        }
+
+
         public ICategoriaRepository Categorias
         {
             get

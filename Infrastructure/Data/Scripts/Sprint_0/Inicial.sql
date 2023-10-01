@@ -6,6 +6,29 @@
 
 START TRANSACTION;
 
+CREATE TABLE `AuthPermisos` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Nombre` longtext COLLATE utf8mb4_general_ci NULL,
+    `Modulo` longtext COLLATE utf8mb4_general_ci NULL,
+    CONSTRAINT `PK_AuthPermisos` PRIMARY KEY (`Id`)
+) COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `AuthRoles` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Nombre` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+    CONSTRAINT `PK_AuthRoles` PRIMARY KEY (`Id`)
+) COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `AuthUsuarios` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Usuario` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+    `Password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+    `Nombre` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+    `Correo` varchar(255) COLLATE utf8mb4_general_ci NULL,
+    `Dni` varchar(255) COLLATE utf8mb4_general_ci NULL,
+    CONSTRAINT `PK_AuthUsuarios` PRIMARY KEY (`Id`)
+) COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `Categoria` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `Nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
@@ -16,6 +39,22 @@ CREATE TABLE `Marca` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `Nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
     CONSTRAINT `PK_Marca` PRIMARY KEY (`Id`)
+) COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `AuthRolesPermisos` (
+    `RolId` int NOT NULL,
+    `PermisoId` int NOT NULL,
+    CONSTRAINT `PK_AuthRolesPermisos` PRIMARY KEY (`RolId`, `PermisoId`),
+    CONSTRAINT `FK_AuthRolesPermisos_AuthPermisos_PermisoId` FOREIGN KEY (`PermisoId`) REFERENCES `AuthPermisos` (`Id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_AuthRolesPermisos_AuthRoles_RolId` FOREIGN KEY (`RolId`) REFERENCES `AuthRoles` (`Id`) ON DELETE CASCADE
+) COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `AuthUsuariosRoles` (
+    `UsuarioId` int NOT NULL,
+    `RolId` int NOT NULL,
+    CONSTRAINT `PK_AuthUsuariosRoles` PRIMARY KEY (`UsuarioId`, `RolId`),
+    CONSTRAINT `FK_AuthUsuariosRoles_AuthRoles_RolId` FOREIGN KEY (`RolId`) REFERENCES `AuthRoles` (`Id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_AuthUsuariosRoles_AuthUsuarios_UsuarioId` FOREIGN KEY (`UsuarioId`) REFERENCES `AuthUsuarios` (`Id`) ON DELETE CASCADE
 ) COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `Producto` (
@@ -30,12 +69,16 @@ CREATE TABLE `Producto` (
     CONSTRAINT `FK_Producto_Marca_MarcaId` FOREIGN KEY (`MarcaId`) REFERENCES `Marca` (`Id`) ON DELETE CASCADE
 ) COLLATE=utf8mb4_general_ci;
 
+CREATE INDEX `IX_AuthRolesPermisos_PermisoId` ON `AuthRolesPermisos` (`PermisoId`);
+
+CREATE INDEX `IX_AuthUsuariosRoles_RolId` ON `AuthUsuariosRoles` (`RolId`);
+
 CREATE INDEX `IX_Producto_CategoriaId` ON `Producto` (`CategoriaId`);
 
 CREATE INDEX `IX_Producto_MarcaId` ON `Producto` (`MarcaId`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20230930114636_Inicial', '7.0.10');
+VALUES ('20231001121211_Inicial', '7.0.10');
 
 COMMIT;
 

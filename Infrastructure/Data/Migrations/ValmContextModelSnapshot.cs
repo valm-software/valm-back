@@ -20,7 +20,7 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Core.Entities.Auth_Permiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthPermiso", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,10 +34,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("auth_Permisos");
+                    b.ToTable("AuthPermisos");
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_Rol", b =>
+            modelBuilder.Entity("Core.Entities.AuthRol", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,10 +50,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Auth_Roles", (string)null);
+                    b.ToTable("AuthRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_RolPermiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthRolPermiso", b =>
                 {
                     b.Property<int>("RolId")
                         .HasColumnType("int");
@@ -65,10 +65,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("PermisoId");
 
-                    b.ToTable("Auth_RolesPermisos", (string)null);
+                    b.ToTable("AuthRolesPermisos", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_Usuario", b =>
+            modelBuilder.Entity("Core.Entities.AuthUsuario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,10 +99,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Auth_Usuarios", (string)null);
+                    b.ToTable("AuthUsuarios", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_UsuarioRol", b =>
+            modelBuilder.Entity("Core.Entities.AuthUsuarioRol", b =>
                 {
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
@@ -114,7 +114,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("RolId");
 
-                    b.ToTable("Auth_UsuariosRoles", (string)null);
+                    b.ToTable("AuthUsuariosRoles", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Categoria", b =>
@@ -181,42 +181,42 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_RolPermiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthRolPermiso", b =>
                 {
-                    b.HasOne("Core.Entities.Auth_Permiso", "Auth_Permiso")
+                    b.HasOne("Core.Entities.AuthPermiso", "AuthPermiso")
                         .WithMany()
                         .HasForeignKey("PermisoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Auth_Rol", "Auth_Rol")
-                        .WithMany("Auth_RolPermisos")
+                    b.HasOne("Core.Entities.AuthRol", "AuthRol")
+                        .WithMany("AuthRolPermisos")
                         .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Auth_Permiso");
+                    b.Navigation("AuthPermiso");
 
-                    b.Navigation("Auth_Rol");
+                    b.Navigation("AuthRol");
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_UsuarioRol", b =>
+            modelBuilder.Entity("Core.Entities.AuthUsuarioRol", b =>
                 {
-                    b.HasOne("Core.Entities.Auth_Rol", "Auth_Rol")
-                        .WithMany("Auth_UsuarioRoles")
+                    b.HasOne("Core.Entities.AuthRol", "AuthRol")
+                        .WithMany("AuthUsuarioRoles")
                         .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Auth_Usuario", "Auth_Usuario")
-                        .WithMany("Auth_UsuarioRoles")
+                    b.HasOne("Core.Entities.AuthUsuario", "AuthUsuario")
+                        .WithMany("AuthUsuarioRoles")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Auth_Rol");
+                    b.Navigation("AuthRol");
 
-                    b.Navigation("Auth_Usuario");
+                    b.Navigation("AuthUsuario");
                 });
 
             modelBuilder.Entity("Core.Entities.Producto", b =>
@@ -238,16 +238,16 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Marca");
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_Rol", b =>
+            modelBuilder.Entity("Core.Entities.AuthRol", b =>
                 {
-                    b.Navigation("Auth_RolPermisos");
+                    b.Navigation("AuthRolPermisos");
 
-                    b.Navigation("Auth_UsuarioRoles");
+                    b.Navigation("AuthUsuarioRoles");
                 });
 
-            modelBuilder.Entity("Core.Entities.Auth_Usuario", b =>
+            modelBuilder.Entity("Core.Entities.AuthUsuario", b =>
                 {
-                    b.Navigation("Auth_UsuarioRoles");
+                    b.Navigation("AuthUsuarioRoles");
                 });
 
             modelBuilder.Entity("Core.Entities.Categoria", b =>

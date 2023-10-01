@@ -4,11 +4,11 @@ using Core.Entities;
 
 namespace Infrastructure.Data.Configuration
 {
-    public class ConfigurationAuth_Rol : IEntityTypeConfiguration<Auth_Rol>
+    public class AuthRolConfiguration : IEntityTypeConfiguration<AuthRol>
     {
-        public void Configure(EntityTypeBuilder<Auth_Rol> builder)
+        public void Configure(EntityTypeBuilder<AuthRol> builder)
         {
-            builder.ToTable("Auth_Roles");
+            builder.ToTable("AuthRoles");
             builder.HasKey(r => r.Id);
             builder.Property(r => r.Nombre).IsRequired().HasMaxLength(255);
         }

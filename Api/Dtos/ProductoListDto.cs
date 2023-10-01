@@ -1,6 +1,6 @@
 ﻿namespace Api.Dtos
 {
-    public class DtoProductoList
+    public class ProductoListDto
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
