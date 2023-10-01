@@ -98,9 +98,9 @@ namespace Infrastructure.UnitOfWork
                 return _productos;
             }
         }
-        public int Save()
+        public async Task<int> SaveAsync()
         {
-            return _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         public void Dispose()

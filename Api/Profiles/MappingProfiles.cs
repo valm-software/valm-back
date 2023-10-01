@@ -18,11 +18,17 @@ namespace Api.Profiles
                 .ReverseMap();
 
             CreateMap<Producto, ProductoListDto>()
-                .ForMember(des => des.Marca, origen => origen.MapFrom(origen => origen.Marca.Nombre))
-                .ForMember(des => des.Categoria, origen => origen.MapFrom(origen => origen.Categoria.Nombre))
+                .ForMember(dest => dest.Marca, origen => origen.MapFrom(origen => origen.Marca.Nombre))
+                .ForMember(dest => dest.Categoria, origen => origen.MapFrom(origen => origen.Categoria.Nombre))
                 .ReverseMap()
-                .ForMember(origen => origen.Categoria, des => des.Ignore())
-                .ForMember(origen => origen.Marca, des => des.Ignore());
+                .ForMember(origen => origen.Categoria, dest => dest.Ignore())
+                .ForMember(origen => origen.Marca, dest => dest.Ignore());
+
+
+            CreateMap<Producto, ProductoAddUpdateDto>()
+                .ReverseMap()
+                .ForMember(origen => origen.Categoria, dest => dest.Ignore())
+                .ForMember(origen => origen.Marca, dest => dest.Ignore());
 
         }
 

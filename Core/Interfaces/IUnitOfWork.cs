@@ -13,6 +13,6 @@
         IAuthUsuarioRolRepository AuthUsuariosRoles { get; }
         IAuthRolPermisoRepository AuthRolesPermisos { get; }
 
-        int Save();
+        Task<int> SaveAsync();
     }
 }
