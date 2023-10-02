@@ -8,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
-builder.Services.ConfigureJwtAuthentication(builder.Configuration); 
-
 builder.Services.AddAplicacionServices();
+builder.Services.ConfigureJwtAuthentication(builder.Configuration);
+
+
 builder.Services.AddControllers();
 
 // Este es actualizado y autodetecta la version de mariaDb
@@ -63,6 +64,7 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

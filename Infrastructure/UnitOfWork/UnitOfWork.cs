@@ -1,7 +1,7 @@
 ﻿using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.UnitOfWork
 {
@@ -16,11 +16,14 @@ namespace Infrastructure.UnitOfWork
         private IAuthPermisoRepository _authPermisos;
         private IAuthUsuarioRolRepository _authUsuariosRoles;
         private IAuthRolPermisoRepository _authRolesPermisos;
+        private IDbContextTransaction _transaction;
 
         public UnitOfWork(ValmContext context)
         {
             _context = context;
         }
+
+
 
 
 
@@ -56,14 +59,28 @@ namespace Infrastructure.UnitOfWork
             }
         }
 
+        //public IAuthRolPermisoRepository AuthRolesPermisos
+        //{
+        //    get
+        //    {
+        //        return _authRolesPermisos ??= new AuthRolPermisoRepository(_context);
+        //    }
+        //}
+
+
         public IAuthRolPermisoRepository AuthRolesPermisos
         {
             get
             {
-                return _authRolesPermisos ??= new AuthRolPermisoRepository(_context);
+                if (_authRolesPermisos == null)
+                {
+                     _authRolesPermisos = new AuthRolPermisoRepository(_context);
+                }
+                
+                return _authRolesPermisos;
+
             }
         }
-
 
         public ICategoriaRepository Categorias
         {
@@ -98,6 +115,28 @@ namespace Infrastructure.UnitOfWork
                 return _productos;
             }
         }
+        
+        public async Task BeginTransactionAsync()
+        {
+            _transaction = await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.CommitAsync();
+            }
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+            }
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

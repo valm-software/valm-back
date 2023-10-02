@@ -13,6 +13,10 @@
         IAuthUsuarioRolRepository AuthUsuariosRoles { get; }
         IAuthRolPermisoRepository AuthRolesPermisos { get; }
 
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
+
         Task<int> SaveAsync();
     }
 }

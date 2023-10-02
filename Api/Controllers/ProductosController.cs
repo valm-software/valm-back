@@ -62,7 +62,6 @@ namespace Api.Controllers
             return CreatedAtAction(nameof(Post), new { id = productoDto.Id }, productoDto);
         }
 
-
         //PUT: api/Productos/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
