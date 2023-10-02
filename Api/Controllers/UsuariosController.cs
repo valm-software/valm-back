@@ -15,11 +15,20 @@ namespace Api.Controllers
         }
 
         [HttpPost("NuevoUsuario")]
-        public async Task<ActionResult> NuevoUsuarioAsync(NuevoUsuarioDto model)
+        public async Task<ActionResult> NuevoUsuarioAsync(UsuarioNuevoDto model)
         {
             var result = await _userService.NuevoUsuarioAsync(model);
             return Ok(result);
         }
+
+        [HttpPost("Token")]
+        public async Task<IActionResult> GetTokenAsync(UsuarioLoginDto model)
+        {
+            var result = await _userService.GetTokenAsync(model);
+            return Ok(result);
+        }
+
+
 
     }
 }

@@ -85,5 +85,24 @@ namespace Infrastructure.Repositories
             return await _valmContext.AuthUsuarios
                 .FirstOrDefaultAsync(u => u.Correo == email);
         }
+
+
+        /// <summary>
+        /// Obtiene lso datos del usuario por su nombre.
+        /// </summary>
+        /// <param name="email">El correo electrónico del usuario.</param>
+        /// <returns>El usuario que corresponde al correo electrónico.</returns>
+        public async Task<AuthUsuario> GetByUsuarioAsync(string usuario)
+        {
+            return await _valmContext.AuthUsuarios
+                .Include(u => u.AuthUsuarioRoles) // Incluye la relación AuthUsuarioRoles
+                    .ThenInclude(ur => ur.AuthRol) // Desde AuthUsuarioRoles, incluye AuthRol
+                        .ThenInclude(r => r.AuthRolPermisos) // Desde AuthRol, incluye AuthRolPermisos
+                            .ThenInclude(rp => rp.AuthPermiso) // Desde AuthRolPermisos, incluye AuthPermiso
+                .FirstOrDefaultAsync(u => u.Usuario.ToLower() == usuario.ToLower());
+        }
+
+
+
     }
 }

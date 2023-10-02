@@ -5,6 +5,7 @@ namespace Api.Services
 {
     public interface IUserService
     {
-        Task<string> NuevoUsuarioAsync(NuevoUsuarioDto model);
+        Task<string> NuevoUsuarioAsync(UsuarioNuevoDto model);
+        Task<UsuarioDatosDto> GetTokenAsync(UsuarioLoginDto model);
     }
 }
