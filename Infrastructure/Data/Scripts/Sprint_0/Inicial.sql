@@ -49,6 +49,17 @@ CREATE TABLE `AuthRolesPoliticas` (
     CONSTRAINT `FK_AuthRolesPoliticas_AuthRoles_RolId` FOREIGN KEY (`RolId`) REFERENCES `AuthRoles` (`Id`) ON DELETE CASCADE
 ) COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `AuthRefreshTokens` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `UsuarioId` int NOT NULL,
+    `Token` longtext COLLATE utf8mb4_general_ci NULL,
+    `Expirado` datetime(6) NOT NULL,
+    `Creado` datetime(6) NOT NULL,
+    `Revocado` datetime(6) NULL,
+    CONSTRAINT `PK_AuthRefreshTokens` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_AuthRefreshTokens_AuthUsuarios_UsuarioId` FOREIGN KEY (`UsuarioId`) REFERENCES `AuthUsuarios` (`Id`) ON DELETE CASCADE
+) COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE `AuthUsuariosRoles` (
     `UsuarioId` int NOT NULL,
     `RolId` int NOT NULL,
@@ -69,6 +80,8 @@ CREATE TABLE `Producto` (
     CONSTRAINT `FK_Producto_Marca_MarcaId` FOREIGN KEY (`MarcaId`) REFERENCES `Marca` (`Id`) ON DELETE CASCADE
 ) COLLATE=utf8mb4_general_ci;
 
+CREATE INDEX `IX_AuthRefreshTokens_UsuarioId` ON `AuthRefreshTokens` (`UsuarioId`);
+
 CREATE INDEX `IX_AuthRolesPoliticas_PoliticaId` ON `AuthRolesPoliticas` (`PoliticaId`);
 
 CREATE INDEX `IX_AuthUsuariosRoles_RolId` ON `AuthUsuariosRoles` (`RolId`);
@@ -78,7 +91,7 @@ CREATE INDEX `IX_Producto_CategoriaId` ON `Producto` (`CategoriaId`);
 CREATE INDEX `IX_Producto_MarcaId` ON `Producto` (`MarcaId`);
 
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
-VALUES ('20231003151329_Inicial', '7.0.10');
+VALUES ('20231003214409_Inicial', '7.0.10');
 
 COMMIT;
 

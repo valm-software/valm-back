@@ -113,6 +113,30 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateTable(
+                name: "AuthRefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Token = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
+                    Expirado = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Creado = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Revocado = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthRefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuthRefreshTokens_AuthUsuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AuthUsuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("Relational:Collation", "utf8mb4_general_ci");
+
+            migrationBuilder.CreateTable(
                 name: "AuthUsuariosRoles",
                 columns: table => new
                 {
@@ -168,6 +192,11 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AuthRefreshTokens_UsuarioId",
+                table: "AuthRefreshTokens",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AuthRolesPoliticas_PoliticaId",
                 table: "AuthRolesPoliticas",
                 column: "PoliticaId");
@@ -191,6 +220,9 @@ namespace Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AuthRefreshTokens");
+
             migrationBuilder.DropTable(
                 name: "AuthRolesPoliticas");
 

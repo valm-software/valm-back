@@ -19,6 +19,7 @@ namespace Infrastructure.Data
         public DbSet<AuthPolitica> AuthPoliticas { get; set; }
         public DbSet<AuthRolPolitica> AuthRolesPoliticas { get; set; }
         public DbSet<AuthUsuarioRol> AuthUsuariosRoles { get; set; }
+        public DbSet<AuthRefreshToken> AuthRefreshTokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +37,7 @@ namespace Infrastructure.Data
             modelBuilder.ApplyConfiguration(new AuthPoliticaConfiguration());
             modelBuilder.ApplyConfiguration(new AuthRolPoliticaConfiguration());
             modelBuilder.ApplyConfiguration(new AuthUsuarioRolConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthRefreshTokenConfiguration());
 
 
             //Con este aplica todas las configuracion sin necesidad de hacer referencia de manera individual

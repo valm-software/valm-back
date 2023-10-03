@@ -26,7 +26,7 @@ namespace Api.Extensions
         {
 
             services.AddScoped<IPasswordHasher<AuthUsuario>, PasswordHasher<AuthUsuario>>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }

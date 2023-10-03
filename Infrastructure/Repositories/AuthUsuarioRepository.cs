@@ -98,11 +98,21 @@ namespace Infrastructure.Repositories
                 .Include(u => u.AuthUsuarioRoles) // Incluye la relación AuthUsuarioRoles
                     .ThenInclude(ur => ur.AuthRol) // Desde AuthUsuarioRoles, incluye AuthRol
                         .ThenInclude(r => r.AuthRolPoliticas) // Desde AuthRol, incluye AuthRolPoliticas
-                            .ThenInclude(rp => rp.AuthPolitica) // Desde AuthRolPoliticas, incluye AuthPolitica
+                            .ThenInclude(rp => rp.AuthPolitica) // Desde AuthRolPoliticas, incluye AuthPolitica                                
+                .Include(u => u.AuthRefreshToken)   // Incluye la relación con AuthRefreshtokens
                 .FirstOrDefaultAsync(u => u.Usuario.ToLower() == usuario.ToLower());
         }
 
 
-
+        public  async Task<AuthUsuario> GetByResfrestokenAsync(string refreshToken)
+        {
+            return await _valmContext.AuthUsuarios
+                .Include(u => u.AuthUsuarioRoles) // Incluye la relación AuthUsuarioRoles
+                    .ThenInclude(ur => ur.AuthRol) // Desde AuthUsuarioRoles, incluye AuthRol
+                        .ThenInclude(r => r.AuthRolPoliticas) // Desde AuthRol, incluye AuthRolPoliticas
+                            .ThenInclude(rp => rp.AuthPolitica) // Desde AuthRolPoliticas, incluye AuthPolitica                                
+                .Include(u => u.AuthRefreshToken)   // Incluye la relación con AuthRefreshtokens
+                .FirstOrDefaultAsync(u => u.AuthRefreshToken.Any(t => t.Token==refreshToken));
+        }
     }
 }

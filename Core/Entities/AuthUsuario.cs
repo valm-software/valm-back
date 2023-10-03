@@ -9,6 +9,8 @@ namespace Core.Entities
         public string Nombre { get; set; }
         public string Correo { get; set; }
         public string DNI { get; set; }
+
+        public ICollection<AuthRefreshToken> AuthRefreshToken { get; set; } =new HashSet<AuthRefreshToken>();
         public ICollection<AuthUsuarioRol> AuthUsuarioRoles { get; set; }
     }
 }

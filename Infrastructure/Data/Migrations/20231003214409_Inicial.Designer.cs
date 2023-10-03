@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ValmContext))]
-    [Migration("20231003151329_Inicial")]
+    [Migration("20231003214409_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -42,6 +42,34 @@ namespace Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AuthPoliticas", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Entities.AuthRefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Creado")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Expirado")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("Revocado")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("AuthRefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.AuthRol", b =>
@@ -188,6 +216,17 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
+            modelBuilder.Entity("Core.Entities.AuthRefreshToken", b =>
+                {
+                    b.HasOne("Core.Entities.AuthUsuario", "Usuario")
+                        .WithMany("AuthRefreshToken")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Core.Entities.AuthRolPolitica", b =>
                 {
                     b.HasOne("Core.Entities.AuthPolitica", "AuthPolitica")
@@ -254,6 +293,8 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.AuthUsuario", b =>
                 {
+                    b.Navigation("AuthRefreshToken");
+
                     b.Navigation("AuthUsuarioRoles");
                 });
 

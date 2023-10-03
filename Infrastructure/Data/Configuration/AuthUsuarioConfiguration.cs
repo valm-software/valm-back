@@ -21,6 +21,12 @@ namespace Infrastructure.Data.Configuration
                 .WithOne(ur => ur.AuthUsuario)
                 .HasForeignKey(ur => ur.UsuarioId)
                 .IsRequired();
+
+            builder.HasMany(p => p.AuthRefreshToken)
+                    .WithOne(p => p.Usuario)
+                    .HasForeignKey(p => p.UsuarioId);
+
+
         }
     }
 }
