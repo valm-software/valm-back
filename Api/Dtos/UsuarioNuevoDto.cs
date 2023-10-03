@@ -5,7 +5,7 @@ namespace Api.Dtos
     public class UsuarioNuevoDto
     {
         [Required]
-        public string Dni { get; set; }
+        public string DNI { get; set; }
 
         [Required]
         public string Nombre { get; set; }

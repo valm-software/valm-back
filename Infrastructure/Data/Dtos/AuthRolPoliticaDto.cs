@@ -1,10 +1,10 @@
 ﻿
 namespace Infrastructure.Data.Dtos
 {
-    internal class AuthRolPermisoDto
+    internal class AuthRolPoliticaDto
     {
         public int RolId { get; set; }
-        public int PermisoId { get; set; }
+        public int PoliticaId { get; set; }
 
     }
 }

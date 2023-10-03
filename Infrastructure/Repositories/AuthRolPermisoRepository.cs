@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class AuthRolPermisoRepository : IAuthRolPermisoRepository
+    public class AuthRolPermisoRepository : IAuthRolPoliticaRepository
     {
         private readonly ValmContext _valmContext;
 
@@ -17,9 +17,9 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// Añade una nueva relación Rol-Permiso.
         /// </summary>
-        public async Task AddAsync(AuthRolPermiso authRolPermiso)
+        public async Task AddAsync(AuthRolPolitica authRolPermiso)
         {
-            await _valmContext.AuthRolesPermisos.AddAsync(authRolPermiso);
+            await _valmContext.AuthRolesPoliticas.AddAsync(authRolPermiso);
             await _valmContext.SaveChangesAsync();
         }
 
@@ -33,14 +33,14 @@ namespace Infrastructure.Repositories
         /// <param name="permisoIdNuevo">El ID del permiso nuevo.</param>
         public async Task UpdateAsync(int rolIdAntiguo, int permisoIdAntiguo, int rolIdNuevo, int permisoIdNuevo)
         {
-            var authRolPermiso = await _valmContext.AuthRolesPermisos
-                .Where(rp => rp.RolId == rolIdAntiguo && rp.PermisoId == permisoIdAntiguo)
+            var authRolPermiso = await _valmContext.AuthRolesPoliticas
+                .Where(rp => rp.RolId == rolIdAntiguo && rp.PoliticaId == permisoIdAntiguo)
                 .FirstOrDefaultAsync();
 
             if (authRolPermiso != null)
             {
                 authRolPermiso.RolId = rolIdNuevo;
-                authRolPermiso.PermisoId = permisoIdNuevo;
+                authRolPermiso.PoliticaId = permisoIdNuevo;
                 await _valmContext.SaveChangesAsync();
             }
         }
@@ -49,9 +49,9 @@ namespace Infrastructure.Repositories
         /// <summary>
         /// Elimina una relación Rol-Permiso.
         /// </summary>
-        public async Task DeleteAsync(AuthRolPermiso authRolPermiso)
+        public async Task DeleteAsync(AuthRolPolitica authRolPermiso)
         {
-            _valmContext.AuthRolesPermisos.Remove(authRolPermiso);
+            _valmContext.AuthRolesPoliticas.Remove(authRolPermiso);
             await _valmContext.SaveChangesAsync();
         }
 
@@ -60,12 +60,12 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="rolId">El ID del rol.</param>
         /// <returns>Una lista de permisos asociados al rol.</returns>
-        public async Task<IEnumerable<AuthPermiso>> GetPermisosByRolId(int rolId)
+        public async Task<IEnumerable<AuthPolitica>> GetPermisosByRolId(int rolId)
         {
-            return await _valmContext.AuthRolesPermisos
-                .Include(rp => rp.AuthPermiso)
+            return await _valmContext.AuthRolesPoliticas
+                .Include(rp => rp.AuthPolitica)
                 .Where(rp => rp.RolId == rolId)
-                .Select(rp => rp.AuthPermiso)
+                .Select(rp => rp.AuthPolitica)
                 .ToListAsync();
         }
 
@@ -74,11 +74,11 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="permisoId">El ID del permiso.</param>
         /// <returns>Una lista de roles asociados al permiso.</returns>
-        public async Task<IEnumerable<AuthRol>> GetRolesByPermisoIdAsync(int permisoId)
+        public async Task<IEnumerable<AuthRol>> GetRolesByPoliticaIdAsync(int permisoId)
         {
-            return await _valmContext.AuthRolesPermisos
+            return await _valmContext.AuthRolesPoliticas
                 .Include(rp => rp.AuthRol)
-                .Where(rp => rp.PermisoId == permisoId)
+                .Where(rp => rp.PoliticaId == permisoId)
                 .Select(rp => rp.AuthRol)
                 .ToListAsync();
         }

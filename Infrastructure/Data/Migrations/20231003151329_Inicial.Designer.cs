@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ValmContext))]
-    [Migration("20231001121211_Inicial")]
+    [Migration("20231003151329_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -23,21 +23,25 @@ namespace Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Core.Entities.AuthPermiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthPolitica", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("Modulo")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Nombre")
-                        .HasColumnType("longtext");
+                    b.Property<string>("NombrePolitica")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuthPermisos");
+                    b.ToTable("AuthPoliticas", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.AuthRol", b =>
@@ -46,7 +50,7 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("NombreRol")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -56,19 +60,19 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("AuthRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.AuthRolPermiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthRolPolitica", b =>
                 {
                     b.Property<int>("RolId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PermisoId")
+                    b.Property<int>("PoliticaId")
                         .HasColumnType("int");
 
-                    b.HasKey("RolId", "PermisoId");
+                    b.HasKey("RolId", "PoliticaId");
 
-                    b.HasIndex("PermisoId");
+                    b.HasIndex("PoliticaId");
 
-                    b.ToTable("AuthRolesPermisos", (string)null);
+                    b.ToTable("AuthRolesPoliticas", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.AuthUsuario", b =>
@@ -81,7 +85,7 @@ namespace Infrastructure.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Dni")
+                    b.Property<string>("DNI")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
@@ -184,21 +188,21 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Producto", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Entities.AuthRolPermiso", b =>
+            modelBuilder.Entity("Core.Entities.AuthRolPolitica", b =>
                 {
-                    b.HasOne("Core.Entities.AuthPermiso", "AuthPermiso")
+                    b.HasOne("Core.Entities.AuthPolitica", "AuthPolitica")
                         .WithMany()
-                        .HasForeignKey("PermisoId")
+                        .HasForeignKey("PoliticaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.AuthRol", "AuthRol")
-                        .WithMany("AuthRolPermisos")
+                        .WithMany("AuthRolPoliticas")
                         .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AuthPermiso");
+                    b.Navigation("AuthPolitica");
 
                     b.Navigation("AuthRol");
                 });
@@ -243,7 +247,7 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Core.Entities.AuthRol", b =>
                 {
-                    b.Navigation("AuthRolPermisos");
+                    b.Navigation("AuthRolPoliticas");
 
                     b.Navigation("AuthUsuarioRoles");
                 });

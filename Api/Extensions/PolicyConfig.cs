@@ -7,7 +7,7 @@ namespace Api.Extensions
         public static void AddPolicies(this AuthorizationOptions options)
         {
             options.AddPolicy("Gestionar Usuarios", policy => policy.RequireClaim("policy", "Gestionar Usuarios"));
-            options.AddPolicy("Gestionar Roles y Permisos", policy => policy.RequireClaim("policy", "Gestionar Roles y Permisos"));
+            options.AddPolicy("Gestionar Roles y Politicas", policy => policy.RequireClaim("policy", "Gestionar Roles y Politicas"));
             options.AddPolicy("Realizar Ventas", policy => policy.RequireClaim("policy", "Realizar Ventas"));
             options.AddPolicy("Visualizar Ventas", policy => policy.RequireClaim("policy", "Visualizar Ventas"));
             options.AddPolicy("Gestionar Inventario", policy => policy.RequireClaim("policy", "Gestionar Inventario"));

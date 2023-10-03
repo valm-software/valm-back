@@ -9,9 +9,9 @@
         // interfaces para Auth_XXX
         IAuthUsuarioRepository AuthUsuarios { get; }
         IAuthRolRepository AuthRoles { get; }
-        IAuthPermisoRepository AuthPermisos { get; }
+        IAuthPoliticaRepository AuthPermisos { get; }
         IAuthUsuarioRolRepository AuthUsuariosRoles { get; }
-        IAuthRolPermisoRepository AuthRolesPermisos { get; }
+        IAuthRolPoliticaRepository AuthRolesPermisos { get; }
 
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

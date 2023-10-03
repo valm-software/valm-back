@@ -17,12 +17,12 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="rolId">El ID del rol.</param>
         /// <returns>Una lista de permisos asociados al rol.</returns>
-        public async Task<IEnumerable<AuthPermiso>> GetPermisosByRolIdAsync(int rolId)
+        public async Task<IEnumerable<AuthPolitica>> GetPoliticasByRolIdAsync(int rolId)
         {
-            return await _valmContext.AuthRolesPermisos
-                .Include(rp => rp.AuthPermiso)
+            return await _valmContext.AuthRolesPoliticas
+                .Include(rp => rp.AuthPolitica)
                 .Where(rp => rp.RolId == rolId)
-                .Select(rp => rp.AuthPermiso)
+                .Select(rp => rp.AuthPolitica)
                 .ToListAsync();
         }
 

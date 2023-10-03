@@ -42,38 +42,38 @@ public class ValmContextSeed
                 }            
             }
 
-            if (!context.AuthPermisos.Any())
+            if (!context.AuthPoliticas.Any())
             {
-                using (var readerAuthPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthPermisos.csv"))
+                using (var readerAuthPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthPoliticas.csv"))
                 {
                     using (var csvAuthPermisos = new CsvReader(readerAuthPermisos, CultureInfo.InvariantCulture))
                     {
-                        var AuthPermisos = csvAuthPermisos.GetRecords<AuthPermiso>();
-                        context.AuthPermisos.AddRange(AuthPermisos);
+                        var AuthPermisos = csvAuthPermisos.GetRecords<AuthPolitica>();
+                        context.AuthPoliticas.AddRange(AuthPermisos);
                         await context.SaveChangesAsync();
                     }
                 }
             }
 
-            if (!context.AuthRolesPermisos.Any())
+            if (!context.AuthRolesPoliticas.Any())
             {
-                using (var readerAuthRolesPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthRolesPermisos.csv"))
+                using (var readerAuthRolesPermisos = new StreamReader(ruta + @"/Data/Csvs/AuthRolesPoliticas.csv"))
                 {
                     using (var csvAuthRolesPermisos = new CsvReader(readerAuthRolesPermisos, CultureInfo.InvariantCulture))
                     {
-                        var AuthRolesPermisosRecords = csvAuthRolesPermisos.GetRecords<AuthRolPermisoDto>(); // Utilizamos el DTO aquí
+                        var AuthRolesPermisosRecords = csvAuthRolesPermisos.GetRecords<AuthRolPoliticaDto>(); // Utilizamos el DTO aquí
 
-                        List<AuthRolPermiso> AuthRolesPermisosList = new List<AuthRolPermiso>();
+                        List<AuthRolPolitica> AuthRolesPermisosList = new List<AuthRolPolitica>();
                         foreach (var record in AuthRolesPermisosRecords)
                         {
-                            AuthRolesPermisosList.Add(new AuthRolPermiso
+                            AuthRolesPermisosList.Add(new AuthRolPolitica
                             {
                                 RolId = record.RolId,
-                                PermisoId = record.PermisoId
+                                PoliticaId = record.PoliticaId
                             });
                         }
 
-                        context.AuthRolesPermisos.AddRange(AuthRolesPermisosList);
+                        context.AuthRolesPoliticas.AddRange(AuthRolesPermisosList);
                         await context.SaveChangesAsync();
                     }
                 }

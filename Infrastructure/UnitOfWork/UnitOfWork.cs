@@ -13,9 +13,9 @@ namespace Infrastructure.UnitOfWork
         private ICategoriaRepository _categorias;
         private IAuthUsuarioRepository _authUsuarios;
         private IAuthRolRepository _authRoles;
-        private IAuthPermisoRepository _authPermisos;
+        private IAuthPoliticaRepository _authPoliticas;
         private IAuthUsuarioRolRepository _authUsuariosRoles;
-        private IAuthRolPermisoRepository _authRolesPermisos;
+        private IAuthRolPoliticaRepository _authRolesPoliticas;
         private IDbContextTransaction _transaction;
 
         public UnitOfWork(ValmContext context)
@@ -43,11 +43,11 @@ namespace Infrastructure.UnitOfWork
             }
         }
 
-        public IAuthPermisoRepository AuthPermisos
+        public IAuthPoliticaRepository AuthPermisos
         {
             get
             {
-                return _authPermisos ??= new AuthPermisoRepository(_context);
+                return _authPoliticas ??= new AuthPermisoRepository(_context);
             }
         }
 
@@ -59,25 +59,25 @@ namespace Infrastructure.UnitOfWork
             }
         }
 
-        //public IAuthRolPermisoRepository AuthRolesPermisos
+        //public IAuthRolPermisoRepository AuthRolesPoliticas
         //{
         //    get
         //    {
-        //        return _authRolesPermisos ??= new AuthRolPermisoRepository(_context);
+        //        return _authRolesPoliticas ??= new AuthRolPermisoRepository(_context);
         //    }
         //}
 
 
-        public IAuthRolPermisoRepository AuthRolesPermisos
+        public IAuthRolPoliticaRepository AuthRolesPermisos
         {
             get
             {
-                if (_authRolesPermisos == null)
+                if (_authRolesPoliticas == null)
                 {
-                     _authRolesPermisos = new AuthRolPermisoRepository(_context);
+                     _authRolesPoliticas = new AuthRolPermisoRepository(_context);
                 }
                 
-                return _authRolesPermisos;
+                return _authRolesPoliticas;
 
             }
         }

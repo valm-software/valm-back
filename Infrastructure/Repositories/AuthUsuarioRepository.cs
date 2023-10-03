@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> UsuarioHasRol(int usuarioId, string rolNombre)
         {
             return await _valmContext.AuthUsuariosRoles
-                .AnyAsync(ur => ur.UsuarioId == usuarioId && ur.AuthRol.Nombre == rolNombre);
+                .AnyAsync(ur => ur.UsuarioId == usuarioId && ur.AuthRol.NombreRol == rolNombre);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Infrastructure.Repositories
         public async Task<bool> UsuarioHasPermiso(int usuarioId, string permisoNombre)
         {
             var permisos = await GetPermisosByUsuarioId(usuarioId);
-            return permisos.Any(p => p.Nombre == permisoNombre);
+            return permisos.Any(p => p.NombrePolitica == permisoNombre);
         }
 
 
@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="usuarioId">El ID del usuario.</param>
         /// <returns>Una lista de permisos asociados al usuario.</returns>
-        public async Task<IEnumerable<AuthPermiso>> GetPermisosByUsuarioId(int usuarioId)
+        public async Task<IEnumerable<AuthPolitica>> GetPermisosByUsuarioId(int usuarioId)
         {
             // Obtener los roles del usuario
             var rolesDelUsuario = await _valmContext.AuthUsuariosRoles
@@ -65,9 +65,9 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
 
             // Obtener los permisos de esos roles
-            var permisos = await _valmContext.AuthRolesPermisos
+            var permisos = await _valmContext.AuthRolesPoliticas
                 .Where(rp => rolesDelUsuario.Contains(rp.RolId))
-                .Select(rp => rp.AuthPermiso)
+                .Select(rp => rp.AuthPolitica)
                 .ToListAsync();
 
             return permisos;
@@ -97,8 +97,8 @@ namespace Infrastructure.Repositories
             return await _valmContext.AuthUsuarios
                 .Include(u => u.AuthUsuarioRoles) // Incluye la relación AuthUsuarioRoles
                     .ThenInclude(ur => ur.AuthRol) // Desde AuthUsuarioRoles, incluye AuthRol
-                        .ThenInclude(r => r.AuthRolPermisos) // Desde AuthRol, incluye AuthRolPermisos
-                            .ThenInclude(rp => rp.AuthPermiso) // Desde AuthRolPermisos, incluye AuthPermiso
+                        .ThenInclude(r => r.AuthRolPoliticas) // Desde AuthRol, incluye AuthRolPoliticas
+                            .ThenInclude(rp => rp.AuthPolitica) // Desde AuthRolPoliticas, incluye AuthPolitica
                 .FirstOrDefaultAsync(u => u.Usuario.ToLower() == usuario.ToLower());
         }
 

@@ -6,12 +6,12 @@ namespace Core.Entities
     {
         public AuthRol()
         {
-            AuthRolPermisos = new List<AuthRolPermiso>();
+            AuthRolPoliticas = new List<AuthRolPolitica>();
             AuthUsuarioRoles = new List<AuthUsuarioRol>();
         }
 
-        public string Nombre { get; set; }
-        public ICollection<AuthRolPermiso> AuthRolPermisos { get; set; }
+        public string NombreRol { get; set; }
+        public ICollection<AuthRolPolitica> AuthRolPoliticas { get; set; }
         public ICollection<AuthUsuarioRol> AuthUsuarioRoles { get; set; }
     }
 }

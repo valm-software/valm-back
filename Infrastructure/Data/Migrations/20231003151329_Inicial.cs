@@ -13,17 +13,17 @@ namespace Infrastructure.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AuthPermisos",
+                name: "AuthPoliticas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci"),
-                    Modulo = table.Column<string>(type: "longtext", nullable: true, collation: "utf8mb4_general_ci")
+                    NombrePolitica = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci"),
+                    Modulo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthPermisos", x => x.Id);
+                    table.PrimaryKey("PK_AuthPoliticas", x => x.Id);
                 })
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
@@ -33,7 +33,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci")
+                    NombreRol = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci")
                 },
                 constraints: table =>
                 {
@@ -51,7 +51,7 @@ namespace Infrastructure.Data.Migrations
                     Password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci"),
                     Nombre = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false, collation: "utf8mb4_general_ci"),
                     Correo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8mb4_general_ci"),
-                    Dni = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8mb4_general_ci")
+                    DNI = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8mb4_general_ci")
                 },
                 constraints: table =>
                 {
@@ -88,23 +88,23 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "AuthRolesPermisos",
+                name: "AuthRolesPoliticas",
                 columns: table => new
                 {
                     RolId = table.Column<int>(type: "int", nullable: false),
-                    PermisoId = table.Column<int>(type: "int", nullable: false)
+                    PoliticaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthRolesPermisos", x => new { x.RolId, x.PermisoId });
+                    table.PrimaryKey("PK_AuthRolesPoliticas", x => new { x.RolId, x.PoliticaId });
                     table.ForeignKey(
-                        name: "FK_AuthRolesPermisos_AuthPermisos_PermisoId",
-                        column: x => x.PermisoId,
-                        principalTable: "AuthPermisos",
+                        name: "FK_AuthRolesPoliticas_AuthPoliticas_PoliticaId",
+                        column: x => x.PoliticaId,
+                        principalTable: "AuthPoliticas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AuthRolesPermisos_AuthRoles_RolId",
+                        name: "FK_AuthRolesPoliticas_AuthRoles_RolId",
                         column: x => x.RolId,
                         principalTable: "AuthRoles",
                         principalColumn: "Id",
@@ -168,9 +168,9 @@ namespace Infrastructure.Data.Migrations
                 .Annotation("Relational:Collation", "utf8mb4_general_ci");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthRolesPermisos_PermisoId",
-                table: "AuthRolesPermisos",
-                column: "PermisoId");
+                name: "IX_AuthRolesPoliticas_PoliticaId",
+                table: "AuthRolesPoliticas",
+                column: "PoliticaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AuthUsuariosRoles_RolId",
@@ -192,7 +192,7 @@ namespace Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuthRolesPermisos");
+                name: "AuthRolesPoliticas");
 
             migrationBuilder.DropTable(
                 name: "AuthUsuariosRoles");
@@ -201,7 +201,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Producto");
 
             migrationBuilder.DropTable(
-                name: "AuthPermisos");
+                name: "AuthPoliticas");
 
             migrationBuilder.DropTable(
                 name: "AuthRoles");

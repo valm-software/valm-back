@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class AuthPermisoRepository : GenericRepository<AuthPermiso>, IAuthPermisoRepository
+    public class AuthPermisoRepository : GenericRepository<AuthPolitica>, IAuthPoliticaRepository
     {
         public AuthPermisoRepository(ValmContext context) : base(context)
         {
@@ -18,9 +18,9 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="modulo">El nombre del módulo.</param>
         /// <returns>Una lista de permisos.</returns>
-        public async Task<IEnumerable<AuthPermiso>> GetPermisosByModuloAsync(string modulo)
+        public async Task<IEnumerable<AuthPolitica>> GetPermisosByModuloAsync(string modulo)
         {
-            return await _valmContext.AuthPermisos
+            return await _valmContext.AuthPoliticas
                 .Where(p => p.Modulo == modulo)
                 .ToListAsync();
         }
@@ -30,10 +30,10 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <param name="searchTerm">El término de búsqueda.</param>
         /// <returns>Una lista de permisos que coinciden con el término de búsqueda.</returns>
-        public async Task<IEnumerable<AuthPermiso>> SearchPermisosAsync(string searchTerm)
+        public async Task<IEnumerable<AuthPolitica>> SearchPermisosAsync(string searchTerm)
         {
-            return await _valmContext.AuthPermisos
-                .Where(p => p.Nombre.Contains(searchTerm))
+            return await _valmContext.AuthPoliticas
+                .Where(p => p.NombrePolitica.Contains(searchTerm))
                 .ToListAsync();
         }
 
@@ -46,8 +46,8 @@ namespace Infrastructure.Repositories
         {
             // Obtener los roles que tienen asignado este permiso específico.
             // Estamos seleccionando solamente los IDs de los roles para usarlos más adelante.
-            var rolesConPermiso = await _valmContext.AuthRolesPermisos
-                .Where(rp => rp.PermisoId == permisoId)
+            var rolesConPermiso = await _valmContext.AuthRolesPoliticas
+                .Where(rp => rp.PoliticaId == permisoId)
                 .Select(rp => rp.RolId)
                 .ToListAsync();
 
@@ -71,7 +71,7 @@ namespace Infrastructure.Repositories
         /// <returns>Verdadero si el permiso es válido, falso en caso contrario.</returns>
         public async Task<bool> IsValidPermisoAsync(int permisoId)
         {
-            return await _valmContext.AuthPermisos
+            return await _valmContext.AuthPoliticas
                 .AnyAsync(p => p.Id == permisoId);
         }
 
@@ -81,7 +81,7 @@ namespace Infrastructure.Repositories
         /// <returns>El número total de permisos.</returns>
         public async Task<int> CountPermisosAsync()
         {
-            return await _valmContext.AuthPermisos.CountAsync();
+            return await _valmContext.AuthPoliticas.CountAsync();
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Infrastructure.Repositories
         /// <returns>El número de permisos asociados al módulo.</returns>
         public async Task<int> CountPermisosByModuloAsync(string modulo)
         {
-            return await _valmContext.AuthPermisos
+            return await _valmContext.AuthPoliticas
                 .Where(p => p.Modulo == modulo)
                 .CountAsync();
         }

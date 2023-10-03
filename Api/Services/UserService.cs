@@ -32,7 +32,7 @@ namespace Api.Services
             // Crear el nuevo usuario
             var usuario = new AuthUsuario
             {
-                Dni = nuevoUsuarioDto.Dni,
+                DNI = nuevoUsuarioDto.DNI,
                 Nombre = nuevoUsuarioDto.Nombre,
                 Correo = nuevoUsuarioDto.Correo,
                 Usuario = nuevoUsuarioDto.Usuario,
@@ -119,15 +119,15 @@ namespace Api.Services
                 usuarioDatosDto.Usuario = usuario.Usuario;
 
                 // Mapeo de roles y permisos
-                usuarioDatosDto.Roles = usuario.AuthUsuarioRoles.Select(ur => new RolConPermisosDto
+                usuarioDatosDto.Roles = usuario.AuthUsuarioRoles.Select(ur => new RolConPoliticasDto
                 {
-                    Rol = ur.AuthRol.Nombre,
-                    Modulos = ur.AuthRol.AuthRolPermisos
-                               .GroupBy(rp => rp.AuthPermiso.Modulo)
-                               .Select(g => new ModuloConPermisosDto
+                    Rol = ur.AuthRol.NombreRol,
+                    Modulos = ur.AuthRol.AuthRolPoliticas
+                               .GroupBy(rp => rp.AuthPolitica.Modulo)
+                               .Select(g => new ModuloConPoliticasDto
                                {
                                    Modulo = g.Key,
-                                   Permisos = g.Select(rp => rp.AuthPermiso.Nombre).ToList()
+                                   Politicas = g.Select(rp => rp.AuthPolitica.NombrePolitica).ToList()
                                }).ToList()
                 }).ToList();
 
@@ -147,10 +147,10 @@ namespace Api.Services
 
             foreach (var role in roles)
             {
-                roleClaims.Add(new Claim("roles", role.Nombre));
-                foreach (var permiso in role.AuthRolPermisos)
+                roleClaims.Add(new Claim("roles", role.NombreRol));
+                foreach (var permiso in role.AuthRolPoliticas)
                 {
-                    policyClaims.Add(new Claim("policy", permiso.AuthPermiso.Nombre));  // Añadiendo cada permiso como una política
+                    policyClaims.Add(new Claim("policy", permiso.AuthPolitica.NombrePolitica));  // Añadiendo cada permiso como una política
                 }
             }
 
@@ -183,13 +183,13 @@ namespace Api.Services
         //    {
         //        var rolesList = usuario.AuthUsuarioRoles.Select(ur => new
         //        {
-        //            Rol = ur.AuthRol.Nombre,
-        //            Modulos = ur.AuthRol.AuthRolPermisos
-        //                       .GroupBy(rp => rp.AuthPermiso.Modulo)
+        //            Rol = ur.AuthRol.NombrePolitica,
+        //            Modulos = ur.AuthRol.AuthRolPoliticas
+        //                       .GroupBy(rp => rp.AuthPolitica.Modulo)
         //                       .Select(g => new
         //                       {
         //                           Modulo = g.Key,
-        //                           Permisos = g.Select(rp => rp.AuthPermiso.Nombre).ToList()
+        //                           Politicas = g.Select(rp => rp.AuthPolitica.NombrePolitica).ToList()
         //                       }).ToList()
         //        }).ToList();
 
@@ -228,11 +228,11 @@ namespace Api.Services
 
         //    foreach (var role in roles)
         //    {
-        //        roleClaims.Add(new Claim("roles", role.Nombre));
-        //        foreach (var permiso in role.AuthRolPermisos)
+        //        roleClaims.Add(new Claim("roles", role.NombrePolitica));
+        //        foreach (var permiso in role.AuthRolPoliticas)
         //        {
-        //            // Aquí asumo que tienes una propiedad `Nombre` en el objeto permiso.
-        //            permisosClaims.Add(new Claim("permisos", permiso.AuthPermiso.Nombre));
+        //            // Aquí asumo que tienes una propiedad `NombrePolitica` en el objeto permiso.
+        //            permisosClaims.Add(new Claim("permisos", permiso.AuthPolitica.NombrePolitica));
         //        }
         //    }
 
@@ -268,7 +268,7 @@ namespace Api.Services
 
         //    foreach (var role in roles)
         //    {
-        //        roleClaims.Add(new Claim("roles", role.Nombre));
+        //        roleClaims.Add(new Claim("roles", role.NombrePolitica));
         //    }
 
         //    // Aquí también puedes añadir claims para permisos y módulos si los necesitas

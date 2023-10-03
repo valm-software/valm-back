@@ -2,9 +2,9 @@
 
 namespace Core.Entities
 {
-    public class AuthPermiso : BaseEntity
+    public class AuthPolitica : BaseEntity
     {
-        public string Nombre { get; set; }
+        public string NombrePolitica { get; set; }
         public string Modulo { get; set; }
     }
 }

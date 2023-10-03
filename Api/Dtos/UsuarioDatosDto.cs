@@ -10,19 +10,19 @@
         public string Correo { get; set; }
         public string Dni { get; set; }
         public string Token { get; set; }
-        public List<RolConPermisosDto> Roles { get; set; }
+        public List<RolConPoliticasDto> Roles { get; set; }
     }
 
-    public class RolConPermisosDto
+    public class RolConPoliticasDto
     {
         public string Rol { get; set; }
-        public List<ModuloConPermisosDto> Modulos { get; set; }
+        public List<ModuloConPoliticasDto> Modulos { get; set; }
     }
 
-    public class ModuloConPermisosDto
+    public class ModuloConPoliticasDto
     {
         public string Modulo { get; set; }
-        public List<string> Permisos { get; set; }
+        public List<string> Politicas { get; set; }
     }
 
 

@@ -4,13 +4,13 @@ using Core.Entities;
 
 namespace Infrastructure.Data.Configuration
 {
-    public class AuthPermisoConfiguration : IEntityTypeConfiguration<AuthPermiso>
+    public class AuthPoliticaConfiguration : IEntityTypeConfiguration<AuthPolitica>
     {
-        public void Configure(EntityTypeBuilder<AuthPermiso> builder)
+        public void Configure(EntityTypeBuilder<AuthPolitica> builder)
         {
-            builder.ToTable("AuthPermisos");
+            builder.ToTable("AuthPoliticas");
             builder.Property(p => p.Id).IsRequired();
-            builder.Property(p => p.Nombre).IsRequired().HasMaxLength(255);
+            builder.Property(p => p.NombrePolitica).IsRequired().HasMaxLength(255);
             builder.Property(p => p.Modulo).IsRequired().HasMaxLength(255);
         }
     }

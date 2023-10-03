@@ -16,8 +16,8 @@ namespace Infrastructure.Data
 
         public DbSet<AuthUsuario> AuthUsuarios { get; set; }
         public DbSet<AuthRol> AuthRoles { get; set; }
-        public DbSet<AuthPermiso> AuthPermisos { get; set; }
-        public DbSet<AuthRolPermiso> AuthRolesPermisos { get; set; }
+        public DbSet<AuthPolitica> AuthPoliticas { get; set; }
+        public DbSet<AuthRolPolitica> AuthRolesPoliticas { get; set; }
         public DbSet<AuthUsuarioRol> AuthUsuariosRoles { get; set; }
 
 
@@ -33,8 +33,8 @@ namespace Infrastructure.Data
 
             modelBuilder.ApplyConfiguration(new AuthUsuarioConfiguration());
             modelBuilder.ApplyConfiguration(new AuthRolConfiguration());
-            modelBuilder.ApplyConfiguration(new AuthRolPermisoConfiguration());
-            modelBuilder.ApplyConfiguration(new AuthRolPermisoConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthPoliticaConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthRolPoliticaConfiguration());
             modelBuilder.ApplyConfiguration(new AuthUsuarioRolConfiguration());
 
 

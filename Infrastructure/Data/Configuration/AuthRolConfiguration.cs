@@ -10,7 +10,7 @@ namespace Infrastructure.Data.Configuration
         {
             builder.ToTable("AuthRoles");
             builder.HasKey(r => r.Id);
-            builder.Property(r => r.Nombre).IsRequired().HasMaxLength(255);
+            builder.Property(r => r.NombreRol).IsRequired().HasMaxLength(255);
         }
     }
 }

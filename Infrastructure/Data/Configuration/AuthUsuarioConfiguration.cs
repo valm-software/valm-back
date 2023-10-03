@@ -14,7 +14,7 @@ namespace Infrastructure.Data.Configuration
             builder.Property(u => u.Password).IsRequired().HasMaxLength(255);
             builder.Property(u => u.Nombre).IsRequired().HasMaxLength(255);
             builder.Property(u => u.Correo).HasMaxLength(255);
-            builder.Property(u => u.Dni).HasMaxLength(255);
+            builder.Property(u => u.DNI).HasMaxLength(255);
 
             // Relación con Usuarios_Roles
             builder.HasMany(u => u.AuthUsuarioRoles)
