@@ -2,8 +2,10 @@
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -18,6 +20,15 @@ namespace Api.Controllers
             _Mapper = mapper;
         }
 
+        //GET: test
+        [Authorize]
+        [HttpGet("test-roles")]
+        public IActionResult TestRoles()
+        {
+            var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
+            return Ok(new { roles });
+        }
+
         //GET: api/Productos
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,12 +41,15 @@ namespace Api.Controllers
         }
 
         //GET: api/Productos/4
+        [Authorize(Roles = "Administrador")]
+        [Authorize(Policy = "Gestionar Inventario")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductoDto>> Get(int id)
         {
+            var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
             var producto = await _unitOfWork.Productos.GetByIdAsync(id);
             if (producto == null)
                 return NotFound();
@@ -43,7 +57,7 @@ namespace Api.Controllers
             return _Mapper.Map<ProductoDto>(producto);
         }
 
-        //POST: api/Productos
+        //POST: api/Productos        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

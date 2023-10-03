@@ -2,6 +2,7 @@ using Api.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,16 @@ builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
 builder.Services.AddAplicacionServices();
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
-
+builder.Services.ConfigureSwagger();
 
 builder.Services.AddControllers();
+
+// Configura la autorización y añade las políticas
+builder.Services.AddAuthorization(options =>
+{
+    // Aquí es donde añadimos las políticas
+    PolicyConfig.AddPolicies(options);
+});
 
 // Este es actualizado y autodetecta la version de mariaDb
 builder.Services.AddDbContext<ValmContext>(options =>
@@ -24,7 +32,6 @@ builder.Services.AddDbContext<ValmContext>(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Configurar el puerto 5000
 if (!builder.Environment.IsDevelopment())

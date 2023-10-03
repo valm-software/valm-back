@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Newtonsoft.Json; // Asegúrate de importar este espacio de nombres para JsonConvert
 
 namespace Api.Services
 {
@@ -142,22 +143,26 @@ namespace Api.Services
         {
             var roles = usuario.AuthUsuarioRoles.Select(ur => ur.AuthRol).ToList();
             var roleClaims = new List<Claim>();
+            var policyClaims = new List<Claim>();  // Nueva lista de claims para políticas
 
             foreach (var role in roles)
             {
                 roleClaims.Add(new Claim("roles", role.Nombre));
+                foreach (var permiso in role.AuthRolPermisos)
+                {
+                    policyClaims.Add(new Claim("policy", permiso.AuthPermiso.Nombre));  // Añadiendo cada permiso como una política
+                }
             }
-
-            // Aquí también puedes añadir claims para permisos y módulos si los necesitas
 
             var claims = new[]
             {
-                    new Claim(JwtRegisteredClaimNames.Sub, usuario.Usuario),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
-                    new Claim("uid", usuario.Id.ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, usuario.Usuario),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
+                new Claim("uid", usuario.Id.ToString())
             }
-            .Union(roleClaims);
+            .Union(roleClaims)
+            .Union(policyClaims);  // Añadimos los claims de políticas aquí
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
@@ -172,6 +177,124 @@ namespace Api.Services
 
             return jwtSecurityToken;
         }
+
+
+        //private JwtSecurityToken CreateJwtToken(AuthUsuario usuario)
+        //    {
+        //        var rolesList = usuario.AuthUsuarioRoles.Select(ur => new
+        //        {
+        //            Rol = ur.AuthRol.Nombre,
+        //            Modulos = ur.AuthRol.AuthRolPermisos
+        //                       .GroupBy(rp => rp.AuthPermiso.Modulo)
+        //                       .Select(g => new
+        //                       {
+        //                           Modulo = g.Key,
+        //                           Permisos = g.Select(rp => rp.AuthPermiso.Nombre).ToList()
+        //                       }).ToList()
+        //        }).ToList();
+
+        //        // Serializar rolesList a JSON
+        //        var rolesJson = JsonConvert.SerializeObject(rolesList);
+
+        //        var claims = new List<Claim>
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub, usuario.Usuario),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //        new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
+        //        new Claim("uid", usuario.Id.ToString()),
+        //        new Claim("roles", rolesJson) // Añadir roles como JSON
+        //    };
+
+        //        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        //        var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+        //        var jwtSecurityToken = new JwtSecurityToken(
+        //            issuer: _jwt.Issuer,
+        //            audience: _jwt.Audience,
+        //            claims: claims,
+        //            expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
+        //            signingCredentials: signingCredentials
+        //        );
+
+        //        return jwtSecurityToken;
+        //    }
+
+
+        //private JwtSecurityToken CreateJwtToken(AuthUsuario usuario)
+        //{
+        //    var roles = usuario.AuthUsuarioRoles.Select(ur => ur.AuthRol).ToList();
+        //    var roleClaims = new List<Claim>();
+        //    var permisosClaims = new List<Claim>();
+
+        //    foreach (var role in roles)
+        //    {
+        //        roleClaims.Add(new Claim("roles", role.Nombre));
+        //        foreach (var permiso in role.AuthRolPermisos)
+        //        {
+        //            // Aquí asumo que tienes una propiedad `Nombre` en el objeto permiso.
+        //            permisosClaims.Add(new Claim("permisos", permiso.AuthPermiso.Nombre));
+        //        }
+        //    }
+
+        //    var claims = new[]
+        //    {
+        //    new Claim(JwtRegisteredClaimNames.Sub, usuario.Usuario),
+        //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //    new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
+        //    new Claim("uid", usuario.Id.ToString())
+        //}
+        //    .Union(roleClaims)
+        //    .Union(permisosClaims);  // Añadimos los claims de permisos aquí
+
+        //    var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        //    var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+        //    var jwtSecurityToken = new JwtSecurityToken(
+        //        issuer: _jwt.Issuer,
+        //        audience: _jwt.Audience,
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
+        //        signingCredentials: signingCredentials
+        //    );
+
+        //    return jwtSecurityToken;
+        //}
+
+
+        //private JwtSecurityToken CreateJwtToken(AuthUsuario usuario)
+        //{
+        //    var roles = usuario.AuthUsuarioRoles.Select(ur => ur.AuthRol).ToList();
+        //    var roleClaims = new List<Claim>();
+
+        //    foreach (var role in roles)
+        //    {
+        //        roleClaims.Add(new Claim("roles", role.Nombre));
+        //    }
+
+        //    // Aquí también puedes añadir claims para permisos y módulos si los necesitas
+
+        //    var claims = new[]
+        //    {
+        //            new Claim(JwtRegisteredClaimNames.Sub, usuario.Usuario),
+        //            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //            new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
+        //            new Claim("uid", usuario.Id.ToString())
+        //    }
+        //    .Union(roleClaims);
+
+        //    var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        //    var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+        //    var jwtSecurityToken = new JwtSecurityToken(
+        //        issuer: _jwt.Issuer,
+        //        audience: _jwt.Audience,
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddMinutes(_jwt.DurationInMinutes),
+        //        signingCredentials: signingCredentials
+        //    );
+
+        //    return jwtSecurityToken;
+        //}
 
     }
 }
