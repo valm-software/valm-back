@@ -33,12 +33,28 @@ builder.Services.AddDbContext<ValmContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-// Configurar el puerto 5000
+//// Configurar el puerto 5000
+//if (!builder.Environment.IsDevelopment())
+//{
+//    builder.WebHost.ConfigureKestrel(serverOptions =>
+//    {
+//        serverOptions.ListenAnyIP(5000);
+//    });
+//}
+
+
 if (!builder.Environment.IsDevelopment())
 {
     builder.WebHost.ConfigureKestrel(serverOptions =>
     {
+        // Para el puerto 5000
         serverOptions.ListenAnyIP(5000);
+
+        // Para SSL en el puerto 5002
+        serverOptions.Listen(System.Net.IPAddress.Any, 5002, listenOptions =>
+        {
+            listenOptions.UseHttps("/etc/nginx/ssl/certValm2023.pfx", "valm2023");
+        });
     });
 }
 
