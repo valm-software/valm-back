@@ -44,7 +44,7 @@ namespace Api.Extensions
             })
                 .AddJwtBearer(o =>
                 {
-                    o.RequireHttpsMetadata = false;
+                    o.RequireHttpsMetadata = true;
                     o.SaveToken = false;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
