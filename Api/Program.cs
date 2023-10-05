@@ -3,8 +3,23 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using Serilog;
+using Serilog.Context;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Serilog 
+var logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(builder.Configuration)
+                    .Enrich.FromLogContext()
+                    .Enrich.WithMachineName()
+                    .Enrich.WithThreadId()
+                    .CreateLogger();
+
+//builder.Logging.ClearProviders(); // Con esto evitamos que el log se vea ne la consola
+builder.Logging.AddSerilog(logger);
+
+
 
 // Add services to the container.
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
@@ -33,16 +48,6 @@ builder.Services.AddDbContext<ValmContext>(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-//// Configurar el puerto 5000
-//if (!builder.Environment.IsDevelopment())
-//{
-//    builder.WebHost.ConfigureKestrel(serverOptions =>
-//    {
-//        serverOptions.ListenAnyIP(5000);
-//    });
-//}
-
-
 if (!builder.Environment.IsDevelopment())
 {
     builder.WebHost.ConfigureKestrel(serverOptions =>
@@ -60,9 +65,14 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+// Usa el middleware personalizado para obtener la ip del cliente
+app.UseMiddleware<SerilogIpEnricherMiddleware>();
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
+
+
 
 
 // Aplicamos de manera automatica las actualizaciones de la base de datos
@@ -78,8 +88,8 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        var logger = loggerfactory.CreateLogger<Program>();
-        logger.LogError(ex, "ocurrio Un error durante la migración");
+        var logger2 = loggerfactory.CreateLogger<Program>();
+        logger2.LogError(ex, "ocurrio Un error durante la migración");
     }
 }
 
@@ -93,7 +103,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<SerilogUserNameEnricherMiddleware>();
 app.MapControllers();
 
 app.Run();

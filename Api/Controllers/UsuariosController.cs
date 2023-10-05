@@ -25,7 +25,12 @@ namespace Api.Controllers
         public async Task<IActionResult> GetTokenAsync(UsuarioLoginDto model)
         {
             var result = await _userService.GetTokenAsync(model);
-            SetRefreshTokenInCookie(result.RefreshToken);
+            if (result.Usuario != null)
+            {
+                SetRefreshTokenInCookie(result.RefreshToken);
+
+            }
+ 
             return Ok(result);
         }
 
