@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Serilog.Context;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,13 @@ if (!builder.Environment.IsDevelopment())
 }
 
 var app = builder.Build();
+
+// Configura el middleware para usar cabeceras forward
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 
 // Usa el middleware personalizado para obtener la ip del cliente
 app.UseMiddleware<SerilogIpEnricherMiddleware>();

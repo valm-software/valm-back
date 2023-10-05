@@ -16,7 +16,7 @@ public class SerilogIpEnricherMiddleware
         // Intenta obtener la dirección IP del cliente desde la cabecera X-Forwarded-For
         if (context.Request.Headers.ContainsKey("X-Forwarded-For"))
         {
-            remoteIpAddress = context.Request.Headers["X-Forwarded-For"];
+            remoteIpAddress = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
         }
 
         if (remoteIpAddress != null)
@@ -31,5 +31,6 @@ public class SerilogIpEnricherMiddleware
             await _next(context);
         }
     }
+
 
 }
