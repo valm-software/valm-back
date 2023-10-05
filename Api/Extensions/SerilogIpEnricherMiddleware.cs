@@ -12,12 +12,24 @@ public class SerilogIpEnricherMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         var remoteIpAddress = context.Connection.RemoteIpAddress?.ToString();
-        if (remoteIpAddress != null)
+
+        // Intenta obtener la dirección IP del cliente desde la cabecera X-Forwarded-For
+        if (context.Request.Headers.ContainsKey("X-Forwarded-For"))
         {
-            LogContext.PushProperty("ClientIP", remoteIpAddress);
+            remoteIpAddress = context.Request.Headers["X-Forwarded-For"];
         }
 
-        // Call the next delegate/middleware in the pipeline
-        await _next(context);
+        if (remoteIpAddress != null)
+        {
+            using (LogContext.PushProperty("ClientIP", remoteIpAddress))
+            {
+                await _next(context);
+            }
+        }
+        else
+        {
+            await _next(context);
+        }
     }
+
 }
