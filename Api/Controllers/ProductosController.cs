@@ -1,4 +1,5 @@
 ﻿using Api.Dtos;
+using Api.Helpers.Errores;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -49,10 +50,10 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductoDto>> Get(int id)
         {
-            var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
+            //var roles = User.FindAll(ClaimTypes.Role).Select(r => r.Value).ToList();
             var producto = await _unitOfWork.Productos.GetByIdAsync(id);
             if (producto == null)
-                return NotFound();
+                return NotFound(new ApiResponse(404));
 
             return _Mapper.Map<ProductoDto>(producto);
         }
@@ -70,7 +71,7 @@ namespace Api.Controllers
 
             if (producto == null)
             {
-                return BadRequest();
+                return BadRequest(new ApiResponse(404));
             }
             productoDto.Id = producto.Id;
             return CreatedAtAction(nameof(Post), new { id = productoDto.Id }, productoDto);
@@ -79,16 +80,28 @@ namespace Api.Controllers
         //PUT: api/Productos/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ProductoAddUpdateDto>> Put(int id, [FromBody] ProductoAddUpdateDto productoDto)
         {
             if (productoDto == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
-            var producto = _Mapper.Map<Producto>(productoDto);
 
-            _unitOfWork.Productos.Update(producto);
+
+            var productoBd = await _unitOfWork.Productos.GetByIdAsync(id);
+            if (productoBd == null)
+                return NotFound(new ApiResponse(404));
+
+
+
+            // var producto = _Mapper.Map<Producto>(productoDto);
+            //_unitOfWork.Productos.Update(producto);
+            //await _unitOfWork.SaveAsync();
+
+            _Mapper.Map(productoDto, productoBd);
+            _unitOfWork.Productos.Update(productoBd);
             await _unitOfWork.SaveAsync();
 
             return productoDto;
@@ -104,7 +117,7 @@ namespace Api.Controllers
             var producto = await _unitOfWork.Productos.GetByIdAsync(id);
             if (producto == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse(404));
             }
 
             _unitOfWork.Productos.Remove(producto);

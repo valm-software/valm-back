@@ -1,10 +1,12 @@
 ﻿using Api.Helpers;
+using Api.Helpers.Errores;
 using Api.Services;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -87,5 +89,29 @@ namespace Api.Extensions
         });
             });
         }
+
+        public static void AddValidationErrors(this IServiceCollection services)
+        {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState.Where(u => u.Value.Errors.Count > 0)
+                                                            .SelectMany(u => u.Value.Errors)
+                                                            .Select(u => u.ErrorMessage).ToArray();
+
+                    var errorResponse = new ApiValidation()
+                    {
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(errorResponse);
+                };
+
+            });
+             
+        }
+
+
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Serilog.Context;
 using Microsoft.AspNetCore.HttpOverrides;
+using Api.Helpers.Errores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,9 @@ builder.Services.ConfigureJwtAuthentication(builder.Configuration);
 builder.Services.ConfigureSwagger();
 
 builder.Services.AddControllers();
+
+builder.Services.AddValidationErrors();
+
 
 // Configura la autorización y añade las políticas
 builder.Services.AddAuthorization(options =>
@@ -66,6 +70,11 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
+
+
 // Configura el middleware para usar cabeceras forward
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
@@ -76,11 +85,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 // Usa el middleware personalizado para obtener la ip del cliente
 app.UseMiddleware<SerilogIpEnricherMiddleware>();
 
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-
-
 
 
 // Aplicamos de manera automatica las actualizaciones de la base de datos
