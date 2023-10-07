@@ -2,15 +2,21 @@ using Api.Extensions;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
 using Serilog;
-using Serilog.Context;
 using Microsoft.AspNetCore.HttpOverrides;
 using Api.Helpers.Errores;
+using AspNetCoreRateLimit;
+
+/*COSAS PARA CORREGIR
+ * 
+ * 1; Cuando las peticiones a la API superan el limite por IP y tiempo no retorna el error utilizando el ApiResponse
+ * 2; Cuando se hace una peticion API en un formato diferente a json o xml  no retorna el error utilizando el ApiResponse
+ * 3; Problema con el Accep en el encabezado de swagger cuado se corroja descomentar la linea  //options.ReturnHttpNotAcceptable = true;
+ */
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Serilog 
+// Configuración de Serilog para el logging
 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(builder.Configuration)
                     .Enrich.FromLogContext()
@@ -18,41 +24,43 @@ var logger = new LoggerConfiguration()
                     .Enrich.WithThreadId()
                     .CreateLogger();
 
-//builder.Logging.ClearProviders(); // Con esto evitamos que el log se vea ne la consola
+// Añadir Serilog al sistema de logging
 builder.Logging.AddSerilog(logger);
 
-
-
-// Add services to the container.
+// Configuración de servicios y dependencias
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
 builder.Services.AddAplicacionServices();
 builder.Services.ConfigureJwtAuthentication(builder.Configuration);
 builder.Services.ConfigureSwagger();
 
-builder.Services.AddControllers();
+// Limitación de tasa
+builder.Services.ConfigureRateLimitiong(builder.Configuration); 
+
+
+builder.Services.AddControllers( options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    //options.ReturnHttpNotAcceptable = true;
+
+}).AddXmlSerializerFormatters();
 
 builder.Services.AddValidationErrors();
 
-
-// Configura la autorización y añade las políticas
+// Configuración de autorización
 builder.Services.AddAuthorization(options =>
 {
-    // Aquí es donde añadimos las políticas
     PolicyConfig.AddPolicies(options);
 });
 
-// Este es actualizado y autodetecta la version de mariaDb
+// Configuración de DbContext
 builder.Services.AddDbContext<ValmContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MariaDBConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-
+// Configuración adicional para producción
 if (!builder.Environment.IsDevelopment())
 {
     builder.WebHost.ConfigureKestrel(serverOptions =>
@@ -70,28 +78,33 @@ if (!builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+// Middleware para manejo de excepciones globales
 app.UseMiddleware<ExceptionMiddleware>();
+
+// Middleware para manejar errores de estado
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-
-
-// Configura el middleware para usar cabeceras forward
+// Middleware para manejar cabeceras forwarded (importantes para obtener la IP real en una configuración de proxy inverso)
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
+// Middleware de AspNetCoreRateLimit para limitación de tasa (debe ir después de cualquier middleware que pueda cambiar la IP)
+app.UseIpRateLimiting();
 
-// Usa el middleware personalizado para obtener la ip del cliente
+// Middleware personalizado para manejar la respuesta de límite de tasa
+//app.UseMiddleware<CustomIpRateLimitMiddleware>();
+
+
+// Middleware personalizado para logging con Serilog
 app.UseMiddleware<SerilogIpEnricherMiddleware>();
 
-
-// Configure the HTTP request pipeline.
+// Middleware para Swagger (documentación API)
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
-// Aplicamos de manera automatica las actualizaciones de la base de datos
+// Migraciones y seed de la base de datos
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -105,21 +118,28 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger2 = loggerfactory.CreateLogger<Program>();
-        logger2.LogError(ex, "ocurrio Un error durante la migración");
+        logger2.LogError(ex, "Ocurrió un error durante la migración");
     }
 }
 
-//app.UseCors("CorsPolicy");
+// Configuración de CORS
 app.UseCors(builder => builder
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+// Middleware para redirección HTTPS
 app.UseHttpsRedirection();
 
+// Middleware para autenticación y autorización
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Middleware personalizado para logging con Serilog
 app.UseMiddleware<SerilogUserNameEnricherMiddleware>();
+
+// Configuración de endpoints
 app.MapControllers();
 
+// Iniciar la aplicación
 app.Run();

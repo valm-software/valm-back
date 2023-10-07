@@ -8,5 +8,10 @@
         public DateTime FechaCreacion { get; set; }
         public MarcaDto Marca { get; set; }
         public CategoriaDto Categoria { get; set; }
+
+        public ProductoDto()
+        {
+
+        }
     }
 }

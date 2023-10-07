@@ -1,6 +1,7 @@
 ﻿using Api.Helpers;
 using Api.Helpers.Errores;
 using Api.Services;
+using AspNetCoreRateLimit;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.UnitOfWork;
@@ -30,6 +31,15 @@ namespace Api.Extensions
             services.AddScoped<IPasswordHasher<AuthUsuario>, PasswordHasher<AuthUsuario>>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        }
+
+        public static void ConfigureRateLimitiong(this IServiceCollection services,  IConfiguration configuration)
+        {            
+            services.AddMemoryCache();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddInMemoryRateLimiting();
+            services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
 
         }
 
@@ -68,6 +78,7 @@ namespace Api.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWT Auth Demo", Version = "v1" });
 
+                c.OperationFilter<AcceptHeaderOperationFilter>();
                 var securityScheme = new OpenApiSecurityScheme
                 {
                     Name = "JWT Authentication",
@@ -82,13 +93,15 @@ namespace Api.Extensions
                         Type = ReferenceType.SecurityScheme
                     }
                 };
+                //c.OperationFilter<AcceptHeaderOperationFilter>();  // Añadir un filtro que agregue opciones para el encabezado Accept
                 c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {securityScheme, new string[] { }}
-        });
+                {
+                    {securityScheme, new string[] { }}
+                });
             });
         }
+
 
         public static void AddValidationErrors(this IServiceCollection services)
         {
@@ -111,6 +124,8 @@ namespace Api.Extensions
             });
              
         }
+
+
 
 
     }

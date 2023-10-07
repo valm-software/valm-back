@@ -12,6 +12,11 @@ namespace Api.Dtos
         public DateTime FechaCreacion { get; set; }
         public int MarcaId { get; set; }
         public int categoriaId { get; set; }
+        
+        
+        public ProductoAddUpdateDto(){
+        
+        }
 
     }
 }

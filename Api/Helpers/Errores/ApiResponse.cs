@@ -1,10 +1,17 @@
-﻿namespace Api.Helpers.Errores
+﻿using AspNetCoreRateLimit;
+
+namespace Api.Helpers.Errores
 {
     public class ApiResponse
     {
         public int StatusCode { get; set; }
         public string SeriousMessage { get; set; }
         public string FunMessage { get; set; }
+
+        public ApiResponse()
+        {
+
+        }
 
         public ApiResponse(int statusCode, string seriousMessage = null, string funMessage = null)
         {
@@ -87,6 +94,11 @@
                 505 => "No soporto esa versión 🚫",
                 _ => "Algo raro pasó y no sé qué es 🤷‍♀️"
             };
+        }
+
+        public static implicit operator QuotaExceededResponse(ApiResponse v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

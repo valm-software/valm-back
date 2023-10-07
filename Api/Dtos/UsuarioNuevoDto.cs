@@ -17,6 +17,9 @@ namespace Api.Dtos
         [Required]
         public string Password { get; set; }
 
+        public UsuarioNuevoDto() { 
+        }
+
 
     }
 }
